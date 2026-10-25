@@ -495,7 +495,9 @@ main {
 .pb li strong { display: block; }
 .pb li span { color: var(--muted); font-size: 15px; }
 .pb.flow { grid-column: 1 / -1; border: 0; background: transparent; padding: 0; }
-.flowsteps { list-style: none; padding: 0 !important; display: grid !important; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); counter-reset: step; }
+.flowsteps { list-style: none; padding: 0 !important; display: grid !important; gap: 10px; grid-template-columns: repeat(2, minmax(0, 1fr)); counter-reset: step; }
+@media (min-width: 600px) { .flowsteps { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1000px) { .flowsteps { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
 .flowsteps li {
   counter-increment: step;
   background: var(--surface);
@@ -688,6 +690,189 @@ textarea.input { min-height: 92px; resize: vertical; }
 }
 #toast.show { opacity: 1; transform: translate(-50%, 0); }
 @media (min-width: 760px) { #toast { bottom: 28px; } }
+
+/* ---------- one thing at a time (Day view, today) */
+.nextup {
+  margin-top: 6px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--c, var(--accent));
+  border-radius: 18px;
+  padding: 18px 18px 12px;
+  display: grid;
+  gap: 10px;
+}
+.nu-when { font-weight: 700; color: var(--accent); font-size: 14.5px; }
+.nu-title { background: none; border: 0; padding: 0; text-align: left; color: inherit; justify-self: start; }
+.nu-title h2 { font-size: 30px; line-height: 1.12; overflow-wrap: anywhere; }
+@media (max-width: 420px) { .nu-title h2 { font-size: 25px; } }
+.nu-sub { color: var(--muted); font-size: 15px; }
+.nu-step { background: var(--bg); border-radius: 14px; padding: 12px 14px; }
+.nu-step b { display: block; font-size: 13.5px; color: var(--muted); }
+.nu-step small { display: block; color: var(--muted); font-size: 13.5px; margin-top: 4px; }
+.nu-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px; }
+.nu-actions .btn.primary { flex: 1 1 230px; min-height: 54px; font-size: 17px; }
+.nu-wall { justify-self: start; padding-left: 2px; padding-right: 2px; }
+.nu-then { color: var(--muted); font-size: 14.5px; margin: 12px 6px 0; }
+.nu-more { display: flex; justify-content: center; margin-top: 14px; }
+
+/* welcome back after a missed day */
+.comeback {
+  background: var(--ok-soft);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin: 0 0 14px;
+  display: grid;
+  gap: 6px;
+}
+.comeback h2 { font-size: 18px; color: var(--ok); }
+
+/* a planned break in the timeline */
+.tl-gap.is-break .tl-gaptext { color: var(--ok); font-weight: 700; }
+
+/* the next three weeks (Board) */
+.duestrip {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  display: grid;
+  gap: 10px;
+}
+.ds-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 14px; }
+.ds-head h2 { font-size: 18px; }
+.ds-scroll { overflow-x: auto; }
+.ds-dow, .ds-grid { display: grid; grid-template-columns: repeat(7, minmax(38px, 1fr)); gap: 4px; min-width: 300px; }
+.ds-dow span { text-align: center; font-size: 12.5px; font-weight: 700; color: var(--muted); }
+.ds-grid { list-style: none; margin: 4px 0 0; padding: 0; }
+.ds-cell {
+  border-radius: 10px;
+  background: var(--bg);
+  min-height: 46px;
+  padding: 5px 4px 4px;
+  display: grid;
+  align-content: space-between;
+  justify-items: center;
+  position: relative;
+}
+.ds-num { font-family: var(--font-display); font-weight: 500; font-size: 13.5px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ds-dots { display: flex; gap: 3px; min-height: 12px; }
+.ds-dots .dot { width: 10px; height: 10px; }
+.ds-cell.is-rest { background: transparent; border: 1px dashed var(--line); }
+.ds-cell.is-past { opacity: 0.5; }
+.ds-cell.is-past::after { content: ""; position: absolute; left: 7px; right: 7px; top: 50%; border-top: 2px solid var(--muted); transform: rotate(-24deg); }
+.ds-cell.is-today { background: var(--accent-soft); box-shadow: inset 0 0 0 2px var(--accent); }
+.ds-cell.is-today .ds-num { color: var(--accent); font-weight: 700; }
+.ds-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.ds-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--line);
+  padding: 8px 2px 4px;
+}
+.ds-list li:first-child .ds-item { border-top: 0; padding-top: 2px; }
+.ds-t { flex: 1; min-width: 0; display: grid; gap: 2px; overflow-wrap: anywhere; }
+.ds-t .tag { justify-self: start; }
+.ds-due { font-weight: 700; font-size: 14px; white-space: nowrap; }
+
+/* review notes, kept optional */
+.morenotes { margin: 2px 0 6px; }
+.morenotes summary { cursor: pointer; font-weight: 700; color: var(--accent); padding: 6px 0 10px; }
+.morenotes[open] summary { margin-bottom: 4px; }
+
+/* focus mode: a calm green box when starting counted, and the wall reset */
+.callout.okbox { background: var(--ok-soft); }
+.wallbox { display: grid; gap: 12px; }
+.wallwords { display: flex; flex-wrap: wrap; gap: 8px; }
+.wallwords .chip { min-height: 44px; padding: 8px 16px; font-size: 15.5px; }
+.wallbox .ring-wrap svg { width: min(200px, 56vw); }
+.focus.is-break .wallbox .ring-fg { stroke: var(--ok); }
+.bodylist { margin: 0; padding-left: 22px; display: grid; gap: 6px; font-size: 17px; }
+
+/* the break between tasks: a green pill with its own countdown */
+.gap-pill { background: var(--ok); color: var(--accent-ink); max-width: calc(100vw - 32px); }
+.gap-pill > button:first-child { display: inline-flex; align-items: baseline; gap: 6px; min-width: 0; text-align: left; }
+.gap-pill #g-pill { font-variant-numeric: tabular-nums; }
+.gp-next { font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 46vw; }
+.gap-pill.is-over .gp-next { font-weight: 700; }
+@media (min-width: 760px) { .gp-next { max-width: 320px; } }
+/* keep messages clear of a timer pill */
+body:has(.focus-pill) #toast { bottom: calc(146px + env(safe-area-inset-bottom, 0px)); }
+@media (min-width: 760px) { body:has(.focus-pill) #toast { bottom: 84px; } }
+
+/* ---------- the anti-schedule: your 24 hours, your week, block goals */
+:root { --k-sleep: #4B5568; --k-school: #2A9D8F; --k-transit: #8C96A8; --k-event: #D2643F; --k-routine: #D99A2B; --k-work: var(--accent); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --k-sleep: #6A7590; --k-school: #3FBFAE; --k-transit: #7D889B; --k-event: #E8805C; --k-routine: #E8B34F; } }
+:root[data-theme="dark"] { --k-sleep: #6A7590; --k-school: #3FBFAE; --k-transit: #7D889B; --k-event: #E8805C; --k-routine: #E8B34F; }
+.k-sleep { background: var(--k-sleep); }
+.k-school { background: var(--k-school); }
+.k-transit { background: repeating-linear-gradient(135deg, var(--k-transit) 0 3px, transparent 3px 6px); }
+.k-event { background: var(--k-event); }
+.k-routine { background: var(--k-routine); }
+.k-work { background: var(--k-work); }
+.k-open { background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--line); }
+.day24 {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 14px 16px 12px;
+  margin-bottom: 12px;
+  display: grid;
+  gap: 8px;
+}
+.d24-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.d24-head h2 { font-size: 18px; }
+.d24-line { font-size: 15px; }
+.d24-bar { position: relative; height: 28px; border-radius: 8px; background: var(--surface-2); overflow: hidden; margin-top: 4px; }
+.d24-seg { position: absolute; top: 0; bottom: 0; }
+.d24-win { position: absolute; top: 0; bottom: 0; border: 2px dashed var(--ink); border-radius: 6px; opacity: 0.55; pointer-events: none; }
+.d24-now { position: absolute; top: 0; bottom: 0; width: 3px; margin-left: -1px; background: var(--warn); border-radius: 2px; }
+.d24-scale { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.d24-legend { list-style: none; margin: 2px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13.5px; }
+.d24-legend li { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; flex: none; }
+
+/* commitments on the timeline */
+.tl-row.is-ev .tl-title { font-weight: 700; }
+.tl-row.kind-sleep .tl-main, .tl-row.kind-transit .tl-main { opacity: 0.82; }
+.tl-row.kind-transit .tl-node { border-style: dashed; }
+
+/* your week list */
+.evlist { display: grid; gap: 6px; margin: 8px 0 4px; }
+.evrow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+.evrow:hover { border-color: var(--accent); }
+.evr-emoji { width: 36px; height: 36px; flex: none; border-radius: 50%; border: 2px solid var(--c); display: grid; place-items: center; font-size: 17px; }
+.evr-main { flex: 1; min-width: 0; display: grid; gap: 2px; overflow-wrap: anywhere; }
+.evr-main small { color: var(--muted); font-size: 13.5px; }
+.evr-go { color: var(--muted); display: grid; place-items: center; }
+.evr-go svg { width: 18px; height: 18px; }
+.addrow { margin: 4px 0 6px; padding-left: 2px; }
+.row2.row-name { grid-template-columns: minmax(0, 1fr) 96px; }
+
+/* goals for a block, and questions to ask */
+.goals { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 6px; }
+.goal { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
+.goal input { width: 20px; height: 20px; margin: 1px 0 0; flex: none; accent-color: var(--ok); }
+.goal.is-done span { text-decoration: line-through; color: var(--muted); }
+.goal-edit li, .qrow { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.goal-add { display: flex; gap: 8px; margin: 10px 0 6px; }
+.goal-add .input { flex: 1; min-width: 0; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }
@@ -918,7 +1103,7 @@ const toHHMM = (m) => `${pad2(Math.floor(m / 60) % 24)}:${pad2(m % 60)}`;
 const fromHHMM = (v) => { if (!v || !/^\d{1,2}:\d{2}/.test(v)) return null; const [h, m] = v.split(':').map(Number); return h * 60 + m; };
 
 // sky colour for a time of day: afternoon gold, sunset coral, dusk violet, night indigo
-const SKY = [[480, '#8EC5E8'], [900, '#F2C14E'], [1050, '#EE8550'], [1170, '#9A5BC4'], [1260, '#2E3380'], [1440, '#1B1F4F']];
+const SKY = [[0, '#1B1F4F'], [330, '#262B6E'], [420, '#E9A76B'], [480, '#8EC5E8'], [900, '#F2C14E'], [1050, '#EE8550'], [1170, '#9A5BC4'], [1260, '#2E3380'], [1440, '#1B1F4F']];
 const hexRgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
 function mix(a, b, t) { const pa = hexRgb(a), pb = hexRgb(b); return '#' + pa.map((v, i) => Math.round(v + (pb[i] - v) * t).toString(16).padStart(2, '0')).join(''); }
 function skyAt(m) {
@@ -941,10 +1126,31 @@ const ICON = {
 };
 
 // ---------- state
+const MISSED_RULE = 'When I miss a day, I start again the next day. No make-up work, no do-overs.';
+const RESET_MIN = 5;
+const WALL_WORDS = ['Flooded', 'Frozen', 'Tired', 'Bored', 'Worried', 'Frustrated'];
+// breaks with a natural end, instead of a scroll with no bottom
+const BREAK_IDEAS = ['Get a glass of water.', 'Stand up and stretch.', 'Walk to a window and look outside.', 'Step outside for a minute.', 'Do ten jumping jacks.', 'Refill your water and come back.'];
+const breakIdea = (n) => BREAK_IDEAS[Math.abs(n || 0) % BREAK_IDEAS.length];
+// the anti-schedule: commitments that happen every week (or on one date), planned first so homework fits around them
+const EVENT_KINDS = ['sleep', 'school', 'transit', 'event'];
+const KIND = {
+  sleep: { label: 'Sleep', emoji: '🌙', color: '#4A4F9C' },
+  school: { label: 'School', emoji: '🏫', color: '#2A9D8F' },
+  transit: { label: 'Travel', emoji: '🚌', color: '#7D8799' },
+  event: { label: 'Event', emoji: '📌', color: '#D2643F' },
+};
+// fixed ids, so two devices updating at the same time agree on the same starting sleep times
+const defaultEvents = () => [
+  { id: 'ev_sleep_school', kind: 'sleep', name: 'Sleep', emoji: '🌙', start: 1320, end: 420, days: [0, 1, 2, 3, 4], date: null, classId: '', before: 0, after: 0, schoolOnly: false, note: '' },
+  { id: 'ev_sleep_weekend', kind: 'sleep', name: 'Sleep', emoji: '🌙', start: 1380, end: 510, days: [5, 6], date: null, classId: '', before: 0, after: 0, schoolOnly: false, note: '' },
+];
+const dayMin = (m) => ((Math.round(m) % 1440) + 1440) % 1440;
 function emptyState() {
   return {
     v: 1,
-    settings: { dayStart: 900, dayEnd: 1260, focusMin: 25, breakMin: 5, stuckMin: 10 },
+    events: defaultEvents(),
+    settings: { dayStart: 900, dayEnd: 1260, focusMin: 25, breakMin: 5, stuckMin: 10, starterMin: 2, gapMin: 10, restDays: [0], missedRule: MISSED_RULE, oneThing: true },
     classes: [], routines: [], tasks: [], days: {},
     meta: { rev: 0, updatedAt: 0, clientId: CLIENT },
   };
@@ -956,6 +1162,10 @@ function normalize(raw) {
   s.settings = {
     dayStart: num(st.dayStart, 900), dayEnd: num(st.dayEnd, 1260),
     focusMin: Math.max(1, num(st.focusMin, 25)), breakMin: Math.max(1, num(st.breakMin, 5)), stuckMin: Math.max(1, num(st.stuckMin, 10)),
+    starterMin: Math.max(1, num(st.starterMin, 2)), gapMin: Math.max(0, num(st.gapMin, 10)),
+    restDays: Array.isArray(st.restDays) ? [...new Set(st.restDays.map(Number).filter((d) => d >= 0 && d <= 6))] : [0],
+    missedRule: typeof st.missedRule === 'string' ? st.missedRule : MISSED_RULE,
+    oneThing: st.oneThing == null ? true : !!st.oneThing,
   };
   s.classes = (Array.isArray(raw.classes) ? raw.classes : []).filter((c) => c && c.id).map((c, i) => ({ id: String(c.id), name: String(c.name || 'Class'), color: isColor(c.color) ? c.color : PALETTE[i % PALETTE.length] }));
   s.routines = (Array.isArray(raw.routines) ? raw.routines : []).filter((r) => r && r.id).map((r, i) => ({
@@ -983,13 +1193,32 @@ function normalize(raw) {
         id: String(i.id), type: i.type, ref: i.ref == null ? null : String(i.ref), stepId: i.stepId == null ? null : String(i.stepId),
         min: Math.max(0, num(i.min, 15)), start: num(i.start, 900), done: !!i.done,
         title: i.title == null ? null : String(i.title), classId: i.classId == null ? null : String(i.classId), taskId: i.taskId == null ? null : String(i.taskId),
+        est: i.est == null ? null : Math.max(0, num(i.est, 0)), actual: Math.max(0, num(i.actual, 0)), hs: !!i.hs,
       })),
       launchItemId: d.launchItemId || null,
       firstStart: d.firstStart == null ? null : num(d.firstStart, null),
-      review: d.review && typeof d.review === 'object' ? { start: d.review.start == null ? null : num(d.review.start, null), helped: String(d.review.helped || ''), blocked: String(d.review.blocked || ''), kind: String(d.review.kind || '') } : null,
+      review: d.review && typeof d.review === 'object' ? {
+        start: d.review.start == null ? null : num(d.review.start, null), helped: String(d.review.helped || ''), blocked: String(d.review.blocked || ''), kind: String(d.review.kind || ''),
+        easiest: String(d.review.easiest || ''), easiestClass: String(d.review.easiestClass || ''), hardest: String(d.review.hardest || ''), hardestClass: String(d.review.hardestClass || ''),
+      } : null,
       start: d.start == null ? null : num(d.start, null), end: d.end == null ? null : num(d.end, null),
+      reward: String(d.reward || ''),
+      // events skipped on this day, "no school today", and goals for each school block
+      off: Array.isArray(d.off) ? d.off.map(String) : [], noSchool: !!d.noSchool,
+      goals: (Array.isArray(d.goals) ? d.goals : []).filter((g) => g && g.id && g.eventId).map((g) => ({ id: String(g.id), eventId: String(g.eventId), text: String(g.text || ''), done: !!g.done })),
+      // what actually happened, in clock minutes: starting and finishing things, and hitting a wall
+      log: (Array.isArray(d.log) ? d.log : []).filter((e) => e && e.id && ['start', 'done', 'wall'].includes(e.kind)).map((e) => ({
+        id: String(e.id), kind: e.kind, at: num(e.at, 0), itemId: e.itemId == null ? null : String(e.itemId), word: String(e.word || ''),
+      })),
     };
   }
+  s.events = Array.isArray(raw.events) ? raw.events.filter((e) => e && e.id).map((e) => ({
+    id: String(e.id), kind: EVENT_KINDS.includes(e.kind) ? e.kind : 'event', name: String(e.name || ''), emoji: String(e.emoji || '').slice(0, 4),
+    start: dayMin(num(e.start, 480)), end: dayMin(num(e.end, 540)),
+    days: Array.isArray(e.days) ? [...new Set(e.days.map(Number).filter((d) => d >= 0 && d <= 6))] : [],
+    date: isYmd(e.date) ? e.date : null, classId: String(e.classId || ''),
+    before: Math.max(0, num(e.before, 0)), after: Math.max(0, num(e.after, 0)), schoolOnly: !!e.schoolOnly, note: String(e.note || ''),
+  })) : defaultEvents();
   const m = raw.meta || {};
   s.meta = { rev: num(m.rev, 0), updatedAt: num(m.updatedAt, 0), clientId: String(m.clientId || '') };
   return s;
@@ -1320,13 +1549,64 @@ const colorOf = (classId) => (cls(classId) && cls(classId).color) || '#6F7D90';
 function remainingMin(t) { return isProject(t) ? t.steps.filter((s) => !s.done).reduce((a, s) => a + s.min, 0) : (t.done ? 0 : t.min); }
 function getDay(date, create) {
   let d = state.days[date];
-  if (!d && create) d = state.days[date] = { items: [], launchItemId: null, firstStart: null, review: null, start: null, end: null };
+  if (!d && create) d = state.days[date] = { items: [], launchItemId: null, firstStart: null, review: null, start: null, end: null, reward: '', log: [], off: [], noSchool: false, goals: [] };
   return d || null;
 }
 function capacityFor(date) {
   const win = windowFor(date);
-  if (date === todayYmd() && nowMin() > win.start) return { live: true, len: Math.max(0, win.end - nowMin()) };
-  return { live: false, len: win.end - win.start };
+  const live = date === todayYmd() && nowMin() > win.start;
+  const from = live ? Math.min(win.end, nowMin()) : win.start;
+  return { live, len: openMinutes(date, from, win.end) };
+}
+// every commitment that happens on a date, with travel before and after. Sleep that crosses midnight shows up
+// twice: the end of last night in the morning, and tonight's in the evening.
+const eventOn = (e, date) => (e.date ? e.date === date : e.days.includes(fromYmd(date).getDay()));
+function occurrencesFor(date) {
+  const out = [];
+  const day = state.days[date];
+  const off = new Set(day ? day.off : []);
+  const noSchool = !!(day && day.noSchool);
+  const prev = addDays(date, -1);
+  const prevDay = state.days[prev];
+  const prevOff = new Set(prevDay ? prevDay.off : []);
+  for (const e of state.events) {
+    const crosses = e.end <= e.start;
+    if (crosses && eventOn(e, prev) && !prevOff.has(e.id)) out.push({ ev: e, kind: e.kind, start: 0, end: e.end, part: 'am', date: prev });
+    if (!eventOn(e, date) || off.has(e.id)) continue;
+    if (noSchool && (e.kind === 'school' || (e.kind === 'transit' && e.schoolOnly))) continue;
+    const end = crosses ? 1440 : e.end;
+    if (e.before && !crosses) out.push({ ev: e, kind: 'transit', start: Math.max(0, e.start - e.before), end: e.start, travel: 'to', date });
+    out.push({ ev: e, kind: e.kind, start: e.start, end, part: crosses ? 'pm' : null, date });
+    if (e.after && !crosses) out.push({ ev: e, kind: 'transit', start: end, end: Math.min(1440, end + e.after), travel: 'from', date });
+  }
+  return out.sort((a, b) => a.start - b.start || a.end - b.end);
+}
+// time that homework can't use: everything committed except sleep (sleep gets a warning instead, so nothing lands after midnight)
+const fixedBusy = (date) => occurrencesFor(date).filter((o) => o.kind !== 'sleep').map((o) => [o.start, o.end]);
+function openMinutes(date, a, b) {
+  if (b <= a) return 0;
+  const ivs = occurrencesFor(date).map((o) => [Math.max(a, o.start), Math.min(b, o.end)]).filter(([x, y]) => y > x).sort((p, q) => p[0] - q[0]);
+  let blocked = 0, cur = a;
+  for (const [x, y] of ivs) { if (y <= cur) continue; blocked += y - Math.max(x, cur); cur = Math.max(cur, y); }
+  return (b - a) - blocked;
+}
+const occTitle = (o) => (o.travel ? (o.travel === 'to' ? `Travel to ${o.ev.name}` : `Travel back from ${o.ev.name}`) : o.ev.name || KIND[o.kind].label);
+// the whole day minute by minute: what each minute is already spoken for by (sleep wins over school, and so on)
+const MAP_KINDS = [null, 'sleep', 'school', 'transit', 'event', 'routine', 'work'];
+function dayMap(date) {
+  const slots = new Int8Array(1440);
+  const paint = (a, b, k) => { for (let m = Math.max(0, a); m < Math.min(1440, b); m++) if (!slots[m] || slots[m] > k) slots[m] = k; };
+  for (const o of occurrencesFor(date)) paint(o.start, o.end, MAP_KINDS.indexOf(o.kind));
+  const day = state.days[date];
+  for (const it of (day ? day.items : [])) { const inf = itemInfo(it); if (inf) paint(it.start, it.start + it.min, inf.routine ? 5 : 6); }
+  const totals = new Array(7).fill(0);
+  const segs = [];
+  for (let m = 0; m < 1440; m++) {
+    totals[slots[m]]++;
+    const last = segs[segs.length - 1];
+    if (last && last.k === slots[m]) last.b = m + 1; else segs.push({ k: slots[m], a: m, b: m + 1 });
+  }
+  return { totals, segs };
 }
 function windowFor(date) { const d = state.days[date]; return { start: d && d.start != null ? d.start : state.settings.dayStart, end: d && d.end != null ? d.end : state.settings.dayEnd }; }
 const itemKey = (type, ref, stepId) => type + ':' + ref + (stepId ? ':' + stepId : '');
@@ -1336,13 +1616,19 @@ function itemInfo(it) {
   if (it.type === 'task') {
     const t = task(it.ref); if (!t) return null;
     const c = cls(t.classId);
-    return { title: t.title, label: c ? c.name : '', color: colorOf(t.classId), done: t.done, hard: t.hard, doneDef: t.doneDef, firstStep: t.firstStep, taskId: t.id };
+    return { title: t.title, label: c ? c.name : '', color: colorOf(t.classId), done: t.done, hard: t.hard, doneDef: t.doneDef, firstStep: t.firstStep, taskId: t.id, classId: t.classId, due: t.due };
   }
   if (it.type === 'step') {
     const t = task(it.ref); const s = t && t.steps.find((x) => x.id === it.stepId); if (!s) return null;
     const c = cls(t.classId);
     const idx = t.steps.indexOf(s), next = t.steps.slice(idx + 1).find((x) => !x.done);
-    return { title: s.title, sub: t.title, label: c ? c.name : '', color: colorOf(t.classId), done: s.done, hard: t.hard, doneDef: s.title + (next ? ` is finished, so “${next.title}” can start.` : ' is finished.'), firstStep: '', taskId: t.id, stepId: s.id };
+    return { title: s.title, sub: t.title, label: c ? c.name : '', color: colorOf(t.classId), done: s.done, hard: t.hard, doneDef: s.title + (next ? ` is finished, so “${next.title}” can start.` : ' is finished.'), firstStep: '', taskId: t.id, stepId: s.id, classId: t.classId, due: t.due };
+  }
+  if (it.type === 'custom' && it.hs) {
+    const t = it.taskId ? task(it.taskId) : null;
+    const c = cls(it.classId);
+    return { title: it.title || 'Head start', label: c ? c.name : '', color: colorOf(it.classId), done: it.done, taskId: it.taskId, classId: it.classId, headStart: true,
+      doneDef: `${it.min} minutes on the ugliest first step, then stop. It will be waiting for you, already started.`, firstStep: t ? t.firstStep : '' };
   }
   if (it.type === 'routine') {
     const r = routine(it.ref); if (!r) return null;
@@ -1350,7 +1636,7 @@ function itemInfo(it) {
   }
   if (it.type === 'custom') {
     const c = cls(it.classId);
-    return { title: it.title || 'Task', label: c ? c.name : '', color: colorOf(it.classId), done: it.done, taskId: it.taskId, doneDef: '', firstStep: '' };
+    return { title: it.title || 'Task', label: c ? c.name : '', color: colorOf(it.classId), done: it.done, taskId: it.taskId, doneDef: '', firstStep: '', classId: it.classId };
   }
   return null;
 }
@@ -1382,6 +1668,89 @@ function removeTaskEverywhere(id) {
   for (const d of Object.values(state.days)) d.items = d.items.filter((i) => !((i.type === 'task' || i.type === 'step') && i.ref === id) && !(i.type === 'custom' && i.taskId === id));
 }
 const fixedAtOf = (it) => { if (it.type !== 'routine') return null; const r = routine(it.ref); return r && r.fixed != null ? r.fixed : null; };
+// homework-type items (not routines, not the five-minute head start)
+const isWork = (it) => !!it && it.type !== 'routine' && !it.hs;
+const classOfItem = (it) => { const inf = itemInfo(it); return inf ? inf.classId || '' : ''; };
+function dueText(due) {
+  if (!due) return '';
+  const n = daysBetween(todayYmd(), due);
+  if (n < 0) return n === -1 ? 'Was due yesterday' : `Was due ${-n} days ago`;
+  return n === 0 ? 'Due today' : n === 1 ? 'Due tomorrow' : `Due in ${n} days`;
+}
+
+// the clock log: real start and finish times, recorded as they happen (today only)
+function logEvent(date, kind, itemId, word) {
+  if (date !== todayYmd()) return;
+  const day = getDay(date, true);
+  day.log.push({ id: uid('e'), kind, at: nowMin(), itemId: itemId || null, word: word || '' });
+  if (day.log.length > 120) day.log = day.log.slice(-120);
+}
+function unlogDone(date, itemId) { const day = getDay(date); if (day) day.log = day.log.filter((e) => !(e.kind === 'done' && e.itemId === itemId)); }
+
+// missed days and rest days: a day "counts" if you started one thing, even for two minutes
+const isRestDay = (date) => state.settings.restDays.includes(fromYmd(date).getDay());
+function dayCounted(date) {
+  const d = state.days[date];
+  if (!d) return false;
+  if (d.firstStart != null || (d.review && d.review.start != null)) return true;
+  if (d.log.some((e) => e.kind === 'start')) return true;
+  return d.items.some((i) => { const inf = itemInfo(i); return inf && inf.done && !inf.routine; });
+}
+function prevSchoolDay(date) { let d = addDays(date, -1); for (let i = 0; i < 7 && isRestDay(d); i++) d = addDays(d, -1); return d; }
+function countedBefore(date, days) { for (let i = 0; i < days; i++) { if (dayCounted(addDays(date, -i))) return true; } return false; }
+// coming back after a missed day is the skill, so it gets counted (streaks don't)
+function isComeback(date) {
+  if (!dayCounted(date)) return false;
+  const p = prevSchoolDay(date);
+  return !dayCounted(p) && countedBefore(addDays(p, -1), 21);
+}
+function missedYesterday() {
+  const t = todayYmd();
+  if (isRestDay(t) || dayCounted(t)) return false;
+  const p = prevSchoolDay(t);
+  return !dayCounted(p) && countedBefore(addDays(p, -1), 21);
+}
+
+// what the clock says about a day: when you started, the gaps between tasks, walls, and guesses
+function auditOf(date) {
+  const day = state.days[date];
+  const out = { start: null, seams: [], walls: [], guesses: [] };
+  if (!day) return out;
+  out.start = day.review && day.review.start != null ? day.review.start : day.firstStart;
+  const byId = new Map(day.items.map((i) => [i.id, i]));
+  const log = [...day.log].sort((a, b) => a.at - b.at);
+  for (const d of log) {
+    if (d.kind !== 'done' || !isWork(byId.get(d.itemId))) continue;
+    const s = log.find((e) => e.kind === 'start' && e.at >= d.at && e.itemId !== d.itemId && isWork(byId.get(e.itemId)));
+    if (!s) continue;
+    // routines in between (dinner, dishes) are planned breaks, not leaks
+    let gap = s.at - d.at;
+    for (const r of day.items) if (r.type === 'routine' && r.start >= d.at && r.start < s.at) gap -= r.min;
+    if (gap >= 0 && gap <= 180) out.seams.push({ gap, after: byId.get(d.itemId), before: byId.get(s.itemId) });
+  }
+  out.walls = log.filter((e) => e.kind === 'wall');
+  for (const i of day.items) {
+    const inf = itemInfo(i);
+    if (inf && isWork(i) && inf.done && i.actual >= 3) out.guesses.push({ title: inf.title, est: i.est != null ? i.est : i.min, actual: Math.round(i.actual), classId: inf.classId || '' });
+  }
+  return out;
+}
+// how your guesses compare with focused time, per class, over recent weeks
+function classRatio(classId, days) {
+  const today = todayYmd();
+  let est = 0, actual = 0, n = 0;
+  for (let i = 0; i < (days || 28); i++) {
+    const day = state.days[addDays(today, -i)];
+    if (!day) continue;
+    for (const it of day.items) {
+      if (!isWork(it) || it.actual < 3) continue;
+      const inf = itemInfo(it);
+      if (!inf || !inf.done || (classId && inf.classId !== classId)) continue;
+      est += it.est != null ? it.est : it.min; actual += it.actual; n++;
+    }
+  }
+  return { n, ratio: est > 0 ? actual / est : 1 };
+}
 
 // ---------- arranging a day
 function firstFree(busy, start, len) {
@@ -1398,10 +1767,11 @@ function arrange(date) {
   const live = day.items.filter((i) => itemInfo(i));
   const done = live.filter((i) => itemInfo(i).done);
   const todo = live.filter((i) => !itemInfo(i).done);
-  const busy = done.map((i) => [i.start, i.start + i.min]);
+  const busy = done.map((i) => [i.start, i.start + i.min]).concat(fixedBusy(date));
   const fixed = todo.filter((i) => fixedAtOf(i) != null);
   fixed.forEach((i) => { i.start = fixedAtOf(i); busy.push([i.start, i.start + i.min]); });
   const rank = (it, idx) => {
+    if (it.hs) return [-1, 0, '', idx];
     if (it.type === 'routine') { const r = routine(it.ref); return [PHASE[r.phase], r.order, '', idx]; }
     if (it.id === day.launchItemId) return [1, 0, '', idx];
     const info = itemInfo(it);
@@ -1410,9 +1780,14 @@ function arrange(date) {
   };
   const flow = todo.filter((i) => fixedAtOf(i) == null).map((it, idx) => ({ it, k: rank(it, idx) }));
   flow.sort((a, b) => { for (let i = 0; i < 4; i++) { if (a.k[i] < b.k[i]) return -1; if (a.k[i] > b.k[i]) return 1; } return 0; });
+  // a planned break between two pieces of homework, so the gap has a shape instead of leaking
+  const seam = state.settings.gapMin;
+  let prevWork = false;
   for (const { it } of flow) {
-    const st = firstFree(busy, cursor, it.min);
+    const from = prevWork && isWork(it) ? cursor + seam : cursor;
+    const st = firstFree(busy, from, it.min);
     it.start = st; busy.push([st, st + it.min]); cursor = st + it.min;
+    prevWork = isWork(it);
   }
   day.items = live.sort((a, b) => a.start - b.start);
 }
@@ -1424,7 +1799,7 @@ function placeItem(date, it) {
   else {
     let start = win.start;
     if (date === todayYmd()) start = Math.max(start, ceil5(nowMin()));
-    it.start = firstFree(day.items.filter((i) => itemInfo(i)).map((i) => [i.start, i.start + i.min]), start, it.min);
+    it.start = firstFree(day.items.filter((i) => itemInfo(i)).map((i) => [i.start, i.start + i.min]).concat(fixedBusy(date)), start, it.min);
   }
   day.items.push(it);
   day.items.sort((a, b) => a.start - b.start);
@@ -1449,7 +1824,7 @@ function planCandidates(date, checks) {
       for (const s of t.steps) {
         if (s.done) continue;
         const key = itemKey('step', t.id, s.id);
-        push({ key, type: 'step', ref: t.id, stepId: s.id, title: s.title, sub: t.title, classId: t.classId, min: s.min, group: groupFor(s.doOn, date, onDay.has(key)), hard: t.hard, doOn: s.doOn });
+        push({ key, type: 'step', ref: t.id, stepId: s.id, title: s.title, sub: t.title, classId: t.classId, min: s.min, group: groupFor(s.doOn, date, onDay.has(key)), hard: t.hard, doOn: s.doOn, due: t.due });
       }
       continue;
     }
@@ -1460,10 +1835,10 @@ function planCandidates(date, checks) {
       continue;
     }
     const key = itemKey('task', t.id);
-    push({ key, type: 'task', ref: t.id, title: t.title, classId: t.classId, min: t.min, group: groupFor(t.doOn, date, onDay.has(key)), hard: t.hard, launch: t.launch, unsure: t.unsure && ans !== 'yes', doOn: t.doOn, firstStep: t.firstStep });
+    push({ key, type: 'task', ref: t.id, title: t.title, classId: t.classId, min: t.min, group: groupFor(t.doOn, date, onDay.has(key)), hard: t.hard, launch: t.launch, unsure: t.unsure && ans !== 'yes', doOn: t.doOn, firstStep: t.firstStep, due: t.due });
   }
   for (const it of ((day && day.items) || [])) {
-    if (it.type === 'custom' && itemInfo(it)) push({ key: keyOfItem(it), type: 'custom', title: it.title, classId: it.classId, min: it.min, group: 'today', taskId: it.taskId });
+    if (it.type === 'custom' && !it.hs && itemInfo(it)) push({ key: keyOfItem(it), type: 'custom', title: it.title, classId: it.classId, min: it.min, group: 'today', taskId: it.taskId });
   }
   for (const r of [...state.routines].sort((a, b) => PHASE[a.phase] - PHASE[b.phase] || a.order - b.order)) {
     const key = itemKey('routine', r.id);
@@ -1472,6 +1847,13 @@ function planCandidates(date, checks) {
   }
   return out;
 }
+function headStartPick(cands, sel, launchKey) {
+  let pool = cands.filter((c) => sel[c.key] && c.type !== 'routine' && !c.fallback);
+  if (pool.length > 1) pool = pool.filter((c) => c.key !== launchKey);
+  if (!pool.length) return null;
+  return [...pool].sort((a, b) => (b.hard - a.hard) || ((a.due || '9999') < (b.due || '9999') ? -1 : (a.due || '9999') > (b.due || '9999') ? 1 : 0) || b.min - a.min)[0];
+}
+const hasBeforeRoutine = (cands, sel) => cands.some((c) => c.type === 'routine' && sel[c.key] && routine(c.ref) && routine(c.ref).phase === 'before');
 function suggestLaunch(cands, sel) {
   const pool = cands.filter((c) => sel[c.key] && c.type !== 'routine');
   if (!pool.length) return null;
@@ -1498,8 +1880,19 @@ function viewDay() {
   const items = ((day && day.items) || []).filter((i) => itemInfo(i)).sort((a, b) => a.start - b.start);
   const isToday = date === todayYmd();
   const cap = capacityFor(date);
-  const total = cap.live ? items.filter((i) => !itemInfo(i).done).reduce((s, i) => s + i.min, 0) : items.reduce((s, i) => s + i.min, 0);
+  const counted = cap.live ? items.filter((i) => !itemInfo(i).done) : items;
+  const total = counted.reduce((s, i) => s + i.min, 0);
+  // planned breaks between two pieces of homework count as time too
+  let seams = 0;
+  for (let i = 1; i < counted.length; i++) if (isWork(counted[i]) && isWork(counted[i - 1])) seams += state.settings.gapMin;
   const welcome = !items.length && !!gh.ns && isEmptyState(state);
+  const open = items.filter((i) => !itemInfo(i).done);
+  const occs = occurrencesFor(date).filter((o) => o.kind !== 'sleep');
+  const upcomingOcc = isToday && occs.some((o) => o.end > nowMin());
+  // today, show one thing at a time: the whole pile reads as one big threat
+  const oneThing = isToday && state.settings.oneThing && !welcome && (open.length > 0 || (!items.length && upcomingOcc));
+  const brk = seams ? ` and ${fmtDur(seams)} of breaks` : '';
+  const meterLabel = cap.live ? `${fmtDur(total)} left to do${brk}, ${fmtDur(cap.len)} open before wind-down` : `${fmtDur(total)} planned${brk}, ${fmtDur(cap.len)} of open time`;
   let h = `<section aria-labelledby="day-title">
     <div class="dayhead">
       <button class="iconbtn" data-act="shiftDay" data-n="-1" aria-label="Previous day">${ICON.left}</button>
@@ -1508,18 +1901,33 @@ function viewDay() {
     </div>
     <div class="daytools">
       ${isToday ? '' : '<button class="chip" data-act="goToday">Back to today</button>'}
-      <button class="chip" data-act="openWindow" aria-label="Change this day's time window">${esc(fmtTime(win.start))} to ${esc(fmtTime(win.end))}</button>
+      <button class="chip" data-act="openWindow" aria-label="Change when homework can start and when wind-down begins">Homework ${esc(fmtTime(win.start))} to ${esc(fmtTime(win.end))}</button>
+      ${oneThing ? '' : '<button class="chip" data-act="openWeek">Your week</button>'}
+      ${isToday && !oneThing && open.length ? '<button class="chip" data-act="oneThing" data-v="1">One thing at a time</button>' : ''}
     </div>
-    ${welcome ? '' : meterHtml(total, cap.len, cap.live ? `${fmtDur(total)} left to do, ${fmtDur(cap.len)} until wind-down` : null)}`;
+    ${isToday && !welcome ? comebackHtml() : ''}
+    ${welcome || oneThing ? '' : day24Html(date, win, cap)}
+    ${welcome || oneThing ? '' : meterHtml(total + seams, cap.len, meterLabel)}`;
   if (welcome) {
     h += welcomeSyncHtml();
+  } else if (oneThing) {
+    h += nextUpHtml(date, day, items, open);
   } else if (!items.length) {
-    h += `<div class="empty">
-      <h2>Nothing planned yet</h2>
-      <p>Two minutes: check which homework is real, pick what fits before wind-down, and choose an easy task to start with.</p>
-      <button class="btn primary" data-act="openPlan">Plan this day</button>
-      ${state.tasks.length || state.routines.length ? '' : '<p class="small">Add your classes on the Board and your routines in Settings first.</p>'}
-    </div>`;
+    if (isRestDay(date)) {
+      h += `<div class="empty">
+        <h2>A day off for your system</h2>
+        <p>${esc(DOW_L[fromYmd(date).getDay()])} is a rest day: no plan or review needed, and nothing here counts as missed. A planned gap is what keeps one empty box from feeling like it ruined everything.</p>
+        <button class="btn" data-act="openPlan">Plan anyway</button>
+      </div>`;
+    } else {
+      h += `<div class="empty">
+        <h2>Nothing planned yet</h2>
+        <p>Two minutes: check which homework is real, pick what fits the open time, and choose an easy task to start with.</p>
+        <button class="btn primary" data-act="openPlan">Plan this day</button>
+        ${state.tasks.length || state.routines.length ? '' : '<p class="small">Add your classes on the Board and your routines in Settings first.</p>'}
+      </div>`;
+    }
+    if (occs.length) h += timelineHtml(date, day, items, win, isToday);
   } else {
     h += `<div class="dayactions">
       <button class="btn" data-act="openPlan">Re-plan</button>
@@ -1528,9 +1936,126 @@ function viewDay() {
     </div>`;
     h += timelineHtml(date, day, items, win, isToday);
   }
-  h += reviewHtml(date, items);
+  if (!oneThing || nowMin() >= win.end - 90) h += reviewHtml(date, items);
   h += `</section>`;
   return h;
+}
+// the anti-schedule at a glance: the whole day, with what's committed and what's open
+function day24Html(date, win, cap) {
+  const { totals, segs } = dayMap(date);
+  const hasFixed = state.events.some((e) => e.kind !== 'sleep');
+  const pct = (m) => (m / 14.4).toFixed(2);
+  const labels = { sleep: 'Sleep', school: 'School', transit: 'Travel', event: 'Events', routine: 'Routines', work: 'Homework' };
+  const bar = segs.map((g) => (g.k ? `<span class="d24-seg k-${MAP_KINDS[g.k]}" style="left:${pct(g.a)}%;width:${pct(g.b - g.a)}%"></span>` : '')).join('');
+  const nowTick = date === todayYmd() ? `<span class="d24-now" style="left:${pct(nowMin())}%"></span>` : '';
+  const winBox = `<span class="d24-win" style="left:${pct(win.start)}%;width:${pct(Math.max(0, win.end - win.start))}%"></span>`;
+  const parts = MAP_KINDS.map((k, i) => (k && totals[i] ? [k, totals[i]] : null)).filter(Boolean);
+  const legend = parts.map(([k, m]) => `<li><span class="sw k-${k}"></span>${labels[k]} ${fmtDur(m)}</li>`).join('') + `<li><span class="sw k-open"></span>Open ${fmtDur(totals[0])}</li>`;
+  const aria = parts.map(([k, m]) => `${labels[k]} ${fmtDur(m)}`).concat(`open ${fmtDur(totals[0])}`).join(', ');
+  const line = hasFixed
+    ? `After sleep, school, travel and events, <strong>${fmtDur(cap.len)}</strong> is open for homework ${cap.live ? 'between now and' : 'before'} wind-down.`
+    : 'Sleep is in. Add your school blocks, travel and other events, and this shows how much time is really open.';
+  return `<div class="day24" aria-labelledby="d24-title">
+    <div class="d24-head"><h2 id="d24-title">Your 24 hours</h2>${hasFixed ? '' : '<button class="chip" data-act="openWeek">Set up your week</button>'}</div>
+    <p class="d24-line">${line}</p>
+    <div class="d24-bar" role="img" aria-label="The whole day: ${esc(aria)}">${bar}${winBox}${nowTick}</div>
+    <div class="d24-scale" aria-hidden="true"><span>12 AM</span><span>6 AM</span><span>Noon</span><span>6 PM</span><span>12 AM</span></div>
+    <ul class="d24-legend">${legend}</ul>
+  </div>`;
+}
+// shown the day after a missed school day, until you start something
+function comebackHtml() {
+  if (!missedYesterday()) return '';
+  const rule = (state.settings.missedRule || '').trim();
+  return `<div class="comeback" role="note">
+    <h2>Welcome back</h2>
+    ${rule ? `<p>Your rule: “${esc(rule)}”</p>` : ''}
+    <p class="small muted">A missed day doesn’t break anything. Coming back is the skill, and it’s what Launchpad counts.</p>
+  </div>`;
+}
+// one thing at a time: whatever is happening now or next, in a big card, with the rest covered up.
+// That can be a school block or an event, not only homework.
+function nextUpHtml(date, day, items, open) {
+  const now = nowMin();
+  const occs = occurrencesFor(date).filter((o) => o.kind !== 'sleep' && o.end > now);
+  const curOcc = occs.find((o) => o.start <= now);
+  const overdue = open.find((i) => !itemInfo(i).routine && i.start + i.min <= now);
+  const current = open.find((i) => i.start <= now && now < i.start + i.min);
+  const upcoming = open.find((i) => i.start >= now) || null;
+  const nextOcc = occs.find((o) => o.start > now);
+  let it = null, occ = null;
+  if (current) it = current;
+  else if (curOcc) occ = curOcc;
+  else if (overdue) it = overdue;
+  else if (upcoming && (!nextOcc || upcoming.start <= nextOcc.start)) it = upcoming;
+  else if (nextOcc) occ = nextOcc;
+  else it = open[0] || null;
+  // what comes after it: homework or a commitment, whichever is first
+  const shownStart = it ? it.start : occ.start;
+  const later = [
+    ...open.filter((i) => i !== it && i.start >= Math.min(shownStart, now)).map((i) => ({ t: i.start, title: itemInfo(i).title })),
+    ...occs.filter((o) => o !== occ && o.start > shownStart && o.start >= now).map((o) => ({ t: o.start, title: occTitle(o) })),
+  ].sort((a, b) => a.t - b.t);
+  const then = later[0];
+  const thenLine = `<p class="nu-then">${then ? `Then: ${esc(then.title)} at ${esc(fmtTime(then.t))}.` : (items.length ? 'That’s the last thing on today’s list.' : 'Nothing planned for after that yet.')}</p>
+    ${items.length ? '' : '<div class="nu-more"><button class="btn primary" data-act="openPlan">Plan the rest of today</button></div>'}`;
+  const more = '<div class="nu-more"><button class="chip" data-act="oneThing" data-v="0">Show the whole day</button></div>';
+  if (occ) return eventCardHtml(date, occ, occ === curOcc) + thenLine + more;
+  const info = itemInfo(it);
+  const when = it === overdue ? `Still to do. It was planned for ${fmtTime(it.start)}.`
+    : it === current ? `Now, until ${fmtTime(it.start + it.min)}`
+    : `Next, at ${fmtTime(it.start)}`;
+  const tags = [];
+  if (it.id === day.launchItemId) tags.push('<span class="tag tag-ok">Your starter</span>');
+  if (info.headStart) tags.push('<span class="tag tag-ok">Five minutes, then stop</span>');
+  if (info.hard && !info.headStart) tags.push('<span class="tag tag-amber">Hard right now</span>');
+  if (info.due && isWork(it)) tags.push(`<span class="tag ${daysBetween(todayYmd(), info.due) <= 1 ? 'tag-warn' : 'tag-accent'}">${esc(dueText(info.due))}</span>`);
+  const sub = [info.sub, info.label && !info.routine ? info.label : ''].filter(Boolean).join(', ');
+  const reward = it.id === day.launchItemId && day.reward ? day.reward : '';
+  let buttons;
+  if (info.routine) buttons = `<button class="btn primary" data-act="startFocus" data-id="${esc(it.id)}">Start the timer</button><button class="btn" data-act="toggleItem" data-id="${esc(it.id)}">Mark done</button>`;
+  else if (info.headStart) buttons = `<button class="btn primary" data-act="startFocus" data-id="${esc(it.id)}">Start the five minutes</button><button class="btn" data-act="toggleItem" data-id="${esc(it.id)}">Mark done</button>`;
+  else buttons = `<button class="btn primary" data-act="justStart" data-id="${esc(it.id)}">Just start: ${state.settings.starterMin} minutes</button><button class="btn" data-act="toggleItem" data-id="${esc(it.id)}">Mark done</button>`;
+  return `<section class="nextup" style="--c:${info.color}" aria-labelledby="nu-title">
+      <p class="nu-when">${esc(when)}</p>
+      <button class="nu-title" data-act="openItem" data-id="${esc(it.id)}"><h2 id="nu-title">${info.emoji ? `<span aria-hidden="true">${esc(info.emoji)}</span> ` : ''}${esc(info.title)}</h2></button>
+      <p class="nu-sub">${sub ? esc(sub) + '. ' : ''}${esc(fmtDur(it.min))}</p>
+      ${tags.length ? `<div class="tags">${tags.join('')}</div>` : ''}
+      ${info.firstStep && !info.routine ? `<div class="nu-step"><b>First tiny step</b>${esc(info.firstStep)}<small>Do it badly on purpose. A rough start still counts.</small></div>` : ''}
+      ${reward ? `<div class="nu-step"><b>Your reward after this</b>${esc(reward)}</div>` : ''}
+      <div class="nu-actions">${buttons}</div>
+      ${isWork(it) ? `<button class="btn ghost nu-wall" data-act="hitWall" data-id="${esc(it.id)}">I’ve hit a wall</button>` : ''}
+      ${it === overdue ? '<button class="btn ghost nu-wall" data-act="rearrange">Move the rest of today later</button>' : ''}
+    </section>${thenLine}${more}`;
+}
+// a school block or event, with this day's goals and any questions saved for that class
+function goalsHtml(date, e) {
+  const day = state.days[date];
+  const goals = day ? day.goals.filter((g) => g.eventId === e.id) : [];
+  if (!goals.length) return '';
+  return `<ul class="goals">${goals.map((g) => `<li><label class="goal ${g.done ? 'is-done' : ''}"><input type="checkbox" data-change="goalDone" data-date="${esc(date)}" data-id="${esc(g.id)}" ${g.done ? 'checked' : ''}><span>${esc(g.text)}</span></label></li>`).join('')}</ul>`;
+}
+function classQuestions(classId) {
+  const out = [];
+  if (classId) for (const t of state.tasks) if (t.classId === classId) for (const q of t.questions) if (!q.asked) out.push({ t, q });
+  return out;
+}
+function eventCardHtml(date, o, isNow) {
+  const e = o.ev;
+  const school = e.kind === 'school' && !o.travel;
+  const c = school ? cls(e.classId) : null;
+  const color = c ? c.color : KIND[o.kind].color;
+  const qs = school ? classQuestions(e.classId) : [];
+  const g = school ? goalsHtml(date, e) : '';
+  return `<section class="nextup is-event" style="--c:${color}" aria-labelledby="nu-title">
+      <p class="nu-when">${esc(isNow ? `Now, until ${fmtTime(o.end)}` : `Next, at ${fmtTime(o.start)}`)}</p>
+      <button class="nu-title" data-act="openOcc" data-ev="${esc(e.id)}" data-od="${esc(o.date)}"><h2 id="nu-title"><span aria-hidden="true">${esc(o.travel ? KIND.transit.emoji : e.emoji || KIND[o.kind].emoji)}</span> ${esc(occTitle(o))}</h2></button>
+      <p class="nu-sub">${esc(c ? c.name : KIND[o.kind].label)}. ${esc(fmtRange(o.start, o.end))}</p>
+      ${e.note && !o.travel ? `<div class="nu-step"><b>${school ? 'This block is for' : 'Note'}</b>${esc(e.note)}</div>` : ''}
+      ${school ? `<div class="nu-step"><b>Your goals for this block</b>${g || '<span class="muted">None yet. One small goal is plenty, like “Ask about question 4.”</span>'}</div>` : ''}
+      ${qs.length ? `<div class="nu-step"><b>Questions to ask</b><ul class="goals">${qs.slice(0, 3).map(({ t, q }) => `<li class="qrow"><span>${esc(q.text)}</span><button class="mini" data-act="askedQ" data-task="${esc(t.id)}" data-id="${esc(q.id)}">Asked</button></li>`).join('')}</ul></div>` : ''}
+      ${school ? `<div class="nu-actions"><button class="btn" data-act="openOcc" data-ev="${esc(e.id)}" data-od="${esc(o.date)}">${g ? 'Edit goals' : 'Add a goal'}</button></div>` : ''}
+    </section>`;
 }
 function meterHtml(total, cap, label) {
   const over = total - cap;
@@ -1543,52 +2068,94 @@ function meterHtml(total, cap, label) {
     <div class="bar"><span style="width:${pct.toFixed(1)}%"></span></div>
   </div>`;
 }
+// the whole day, midnight to midnight: commitments, routines and homework, with the open time between them
 function timelineHtml(date, day, items, win, isToday) {
   const now = isToday ? nowMin() : null;
+  const occs = occurrencesFor(date);
+  const sleeps = occs.filter((o) => o.kind === 'sleep').map((o) => ({ start: o.start, end: o.part === 'pm' ? 1440 + o.ev.end : o.end }));
+  const others = occs.filter((o) => o.kind !== 'sleep');
+  const nowItem = isToday ? items.find((i) => !itemInfo(i).done && i.start <= now && now < i.start + i.min) || null : null;
+  const nowOcc = isToday && !nowItem ? occs.find((o) => o.start <= now && now < o.end) || null : null;
+  const ents = [];
+  items.forEach((it) => ents.push({ t: it.start, e: it.start + it.min, k: 'item', it, ord: 2 }));
+  occs.forEach((o) => ents.push({ t: o.start, e: o.end, k: 'occ', o, ord: 1 }));
+  ents.push({ t: win.start, e: win.start, k: 'mark', ord: 0, html: markRow(win.start, 'Homework time starts', '') });
+  ents.push({ t: win.end, e: win.end, k: 'mark', ord: 0, html: markRow(win.end, 'Wind-down starts', 'Screens down, get ready for sleep.') });
+  if (isToday && !nowItem && !nowOcc) ents.push({ t: now, e: now, k: 'now', ord: 3 });
+  ents.sort((a, b) => a.t - b.t || a.ord - b.ord);
   const rows = [];
-  let nowItem = null;
-  if (isToday) nowItem = items.find((i) => !itemInfo(i).done && i.start <= now && now < i.start + i.min) || null;
-  let nowPlaced = !isToday || !!nowItem || now < win.start - 60 || now > Math.max(win.end, items.length ? items[items.length - 1].start + items[items.length - 1].min : 0) + 60;
-  const nowRow = () => `<li class="tl-nowrow"><div class="tl-time">${esc(fmtTime(now))}</div><div class="tl-rail" style="--a:${skyAt(now)};--b:${skyAt(now)}"><span class="tl-node" style="--c:var(--accent)"></span></div><div class="tl-marktext">Now</div></li>`;
-  const firstStart = Math.min(win.start, items[0].start);
-  if (!nowPlaced && now < firstStart) { rows.push(nowRow()); nowPlaced = true; }
-  rows.push(`<li class="tl-mark"><div class="tl-time">${esc(fmtTime(win.start))}</div><div class="tl-rail" style="--a:${skyAt(win.start)};--b:${skyAt(win.start)}"><span class="tl-node" style="--c:${skyAt(win.start)}"></span></div><div class="tl-marktext">Afternoon starts</div></li>`);
-  let cursor = firstStart;
-  let prevEnd = -Infinity;
-  items.forEach((it) => {
-    const info = itemInfo(it);
-    if (!nowPlaced && now < it.start && now >= cursor) {
-      const g1 = now - cursor;
-      if (g1 >= 5) rows.push(gapRow(cursor, g1));
-      rows.push(nowRow());
-      nowPlaced = true;
-      cursor = Math.max(cursor, now);
+  let cursor = 0, prevEnd = -Infinity, lastReal = null, breaks = 0;
+  for (const en of ents) {
+    const passing = en.k === 'occ' && lastReal && lastReal.k === 'occ' && en.t - cursor < 15;
+    if (en.t - cursor >= 5 && !passing) {
+      const isBreak = en.k === 'item' && lastReal && lastReal.k === 'item' && isWork(lastReal.it) && isWork(en.it) && en.t - cursor <= state.settings.gapMin + 10;
+      rows.push(gapRow(cursor, en.t - cursor, isBreak ? breaks++ : null));
     }
-    const gap = it.start - cursor;
-    if (gap >= 5) rows.push(gapRow(cursor, gap));
-    const flags = {
-      launch: it.id === day.launchItemId && !info.done,
-      now: nowItem === it,
-      overlap: it.start < prevEnd,
-      late: it.start + it.min > win.end && !info.done,
-    };
-    rows.push(itemRow(it, info, flags));
-    prevEnd = Math.max(prevEnd, it.start + it.min);
-    cursor = Math.max(cursor, it.start + it.min);
-  });
-  if (!nowPlaced && now >= cursor && now <= win.end) {
-    if (now - cursor >= 5) rows.push(gapRow(cursor, now - cursor));
-    rows.push(nowRow());
-    cursor = now;
-    nowPlaced = true;
+    if (en.k === 'mark') { rows.push(en.html); cursor = Math.max(cursor, en.t); continue; }
+    if (en.k === 'now') { rows.push(`<li class="tl-nowrow"><div class="tl-time">${esc(fmtTime(now))}</div><div class="tl-rail" style="--a:${skyAt(now)};--b:${skyAt(now)}"><span class="tl-node" style="--c:var(--accent)"></span></div><div class="tl-marktext">Now</div></li>`); cursor = Math.max(cursor, now); continue; }
+    if (en.k === 'occ') rows.push(occRow(en.o, en.o === nowOcc));
+    else {
+      const it = en.it; const info = itemInfo(it); const end = it.start + it.min;
+      const hit = info.done ? null : others.find((o) => o.start < end && o.end > it.start);
+      rows.push(itemRow(it, info, {
+        launch: it.id === day.launchItemId && !info.done,
+        now: nowItem === it,
+        overlap: it.start < prevEnd,
+        late: end > win.end && !info.done,
+        sleep: !info.done && sleeps.some((o) => o.start < end && o.end > it.start),
+        clash: hit ? occTitle(hit) : '',
+      }));
+      prevEnd = Math.max(prevEnd, end);
+    }
+    lastReal = en;
+    cursor = Math.max(cursor, en.e);
   }
-  if (win.end - cursor >= 5) rows.push(gapRow(cursor, win.end - cursor));
-  rows.push(`<li class="tl-mark"><div class="tl-time">${esc(fmtTime(win.end))}</div><div class="tl-rail" style="--a:${skyAt(win.end)};--b:${skyAt(win.end + 60)}"><span class="tl-node" style="--c:${skyAt(win.end)}"></span></div><div class="tl-marktext">Wind-down starts<small>Screens down, get ready for sleep.</small></div></li>`);
-  if (!nowPlaced && now > win.end) rows.push(nowRow());
+  if (1440 - cursor >= 5) rows.push(gapRow(cursor, 1440 - cursor, null));
   return `<ol class="timeline" aria-label="Timeline for ${esc(fmtLong(date))}">${rows.join('')}</ol>`;
 }
-function gapRow(start, len) {
-  return `<li class="tl-gap"><div class="tl-time"></div><div class="tl-rail" style="--a:${skyAt(start)};--b:${skyAt(start + len)}"></div><div class="tl-gaptext">Free, ${fmtDur(len)}</div></li>`;
+function markRow(m, label, small) {
+  return `<li class="tl-mark"><div class="tl-time">${esc(fmtTime(m))}</div><div class="tl-rail" style="--a:${skyAt(m)};--b:${skyAt(m)}"><span class="tl-node" style="--c:${skyAt(m)}"></span></div><div class="tl-marktext">${esc(label)}${small ? `<small>${esc(small)}</small>` : ''}</div></li>`;
+}
+function gapRow(start, len, breakNo) {
+  const text = breakNo != null ? `Break, ${fmtDur(len)}. ${breakIdea(breakNo)} Something with an end, not a scroll.` : `Open, ${fmtDur(len)}`;
+  return `<li class="tl-gap ${breakNo != null ? 'is-break' : ''}"><div class="tl-time"></div><div class="tl-rail" style="--a:${skyAt(start)};--b:${skyAt(start + len)}"></div><div class="tl-gaptext">${esc(text)}</div></li>`;
+}
+function occRow(o, isNow) {
+  const e = o.ev;
+  const school = e.kind === 'school' && !o.travel;
+  const c = school ? cls(e.classId) : null;
+  const color = c ? c.color : KIND[o.kind].color;
+  const emoji = o.travel ? KIND.transit.emoji : (e.emoji || KIND[o.kind].emoji);
+  const len = o.end - o.start;
+  const hgt = Math.max(30, Math.min(o.kind === 'sleep' ? 56 : 110, Math.round(len * 0.8)));
+  let sub = c ? c.name : (o.travel ? 'Travel' : KIND[o.kind].label);
+  let when = fmtRange(o.start, o.end), dur = fmtDur(len);
+  if (o.kind === 'sleep') {
+    sub = o.part === 'am' ? `Since ${fmtTime(e.start)} last night` : `Until ${fmtTime(e.end)} tomorrow`;
+    when = o.part === 'am' ? `Until ${fmtTime(o.end)}` : `From ${fmtTime(o.start)}`;
+    dur = `${fmtDur(1440 - e.start + e.end)} of sleep`;
+  }
+  const tags = [];
+  if (isNow) tags.push('<span class="tag tag-accent">Now</span>');
+  if (school) {
+    const day = state.days[o.date];
+    const gs = day ? day.goals.filter((g) => g.eventId === e.id) : [];
+    if (gs.length) tags.push(`<span class="tag ${gs.every((g) => g.done) ? 'tag-ok' : ''}">${gs.filter((g) => g.done).length} of ${gs.length} ${gs.length === 1 ? 'goal' : 'goals'}</span>`);
+    const qn = classQuestions(e.classId).length;
+    if (qn) tags.push(`<span class="tag">${qn} ${qn === 1 ? 'question' : 'questions'} to ask</span>`);
+  }
+  return `<li class="tl-row is-ev kind-${o.kind} ${isNow ? 'is-now' : ''}">
+    <div class="tl-time">${esc(fmtTime(o.start))}</div>
+    <div class="tl-rail" style="--a:${skyAt(o.start)};--b:${skyAt(o.end)}"><span class="tl-node emoji" style="--c:${color};height:${hgt}px">${esc(emoji)}</span></div>
+    <div class="tl-body">
+      <button class="tl-main" data-act="openOcc" data-ev="${esc(e.id)}" data-od="${esc(o.date)}">
+        <span class="tl-title">${esc(occTitle(o))}</span>
+        <span class="tl-sub">${esc(sub)}</span>
+        <span class="tl-when">${esc(when)}<span class="dur">${esc(dur)}</span></span>
+        ${tags.length ? `<span class="tags">${tags.join('')}</span>` : ''}
+      </button>
+    </div>
+  </li>`;
 }
 function itemRow(it, info, flags) {
   const end = it.start + it.min;
@@ -1597,10 +2164,13 @@ function itemRow(it, info, flags) {
   const tags = [];
   if (flags.now) tags.push('<span class="tag tag-accent">Now</span>');
   if (flags.launch) tags.push('<span class="tag tag-ok">Start here</span>');
+  if (info.headStart && !info.done) tags.push('<span class="tag tag-ok">Five minutes, then stop</span>');
   if (info.hard && !info.done) tags.push('<span class="tag tag-amber">Hard right now</span>');
   if (info.fixed != null && info.routine) tags.push('<span class="tag">Fixed time</span>');
   if (flags.overlap) tags.push('<span class="tag tag-warn">Overlaps</span>');
   if (flags.late) tags.push('<span class="tag tag-warn">Runs past wind-down</span>');
+  if (flags.sleep) tags.push('<span class="tag tag-warn">Cuts into sleep</span>');
+  if (flags.clash) tags.push(`<span class="tag tag-warn">Overlaps ${esc(flags.clash)}</span>`);
   return `<li class="tl-row ${info.done ? 'is-done' : ''} ${flags.now ? 'is-now' : ''}">
     <div class="tl-time">${esc(fmtTime(it.start))}</div>
     <div class="tl-rail" style="--a:${skyAt(it.start)};--b:${skyAt(end)}"><span class="tl-node ${info.emoji ? 'emoji' : ''}" style="--c:${info.color};height:${hgt}px">${node}</span></div>
@@ -1615,6 +2185,13 @@ function itemRow(it, info, flags) {
     </div>
   </li>`;
 }
+// deciding tonight spares tomorrow's willpower
+function planTomorrowBtn(date) {
+  if (date !== todayYmd()) return '';
+  const tm = getDay(addDays(date, 1));
+  if (tm && tm.items.length) return '';
+  return '<button class="btn primary" data-act="planTomorrow">Plan tomorrow now</button>';
+}
 function reviewHtml(date, items) {
   if (!items.length) return '';
   const day = getDay(date);
@@ -1625,16 +2202,18 @@ function reviewHtml(date, items) {
       <h2 id="rev-h">Your review</h2>
       <dl>
         <div><dt>Started at</dt><dd>${esc(startTxt)}</dd></div>
+        ${r.easiest ? `<div><dt>Felt easiest</dt><dd>${esc(r.easiest)}</dd></div>` : ''}
+        ${r.hardest ? `<div><dt>Felt hardest</dt><dd>${esc(r.hardest)}</dd></div>` : ''}
         ${r.helped ? `<div><dt>What helped</dt><dd>${esc(r.helped)}</dd></div>` : ''}
         ${r.blocked ? `<div><dt>What got in the way</dt><dd>${esc(r.blocked)}</dd></div>` : ''}
         ${r.kind ? `<div><dt>Something kind to tell yourself</dt><dd>${esc(r.kind)}</dd></div>` : ''}
       </dl>
-      <div><button class="btn ghost" data-act="openReview">Edit review</button></div>
+      <div class="inline">${planTomorrowBtn(date)}<button class="btn ghost" data-act="openReview">Edit review</button></div>
     </section>`;
   }
   return `<section class="review" aria-labelledby="rev-h">
     <h2 id="rev-h">End of the day</h2>
-    <p class="muted">One minute: when did you start, and what helped? This is how you find out what works for you.</p>
+    <p class="muted">One minute: what felt easiest, what felt hardest, and when you started. Launchpad fills in what the clock saw.</p>
     <div><button class="btn" data-act="openReview">Review this day</button></div>
   </section>`;
 }
@@ -1649,6 +2228,7 @@ function viewBoard() {
     h += `<div class="empty"><h2>Add your first class</h2><p>Each class becomes a column. Homework, projects and readings go inside as cards.</p><button class="btn primary" data-act="newClass">Add a class</button></div></section>`;
     return h;
   }
+  h += dueStripHtml(today);
   h += `<div class="cols-scroll"><div class="cols">`;
   for (const c of state.classes) {
     const tasks = state.tasks.filter((t) => t.classId === c.id && (ui.showDone || !t.done));
@@ -1664,6 +2244,38 @@ function viewBoard() {
   h += `</div></div></section>`;
   return h;
 }
+// three weeks on one strip, starting this Monday: days that are gone get crossed off, due dates are dots
+function dueStripHtml(today) {
+  const t0 = fromYmd(today);
+  const start = addDays(today, -((t0.getDay() + 6) % 7));
+  const end = addDays(start, 20);
+  const open = state.tasks.filter((t) => !t.done && t.due);
+  const dueOn = new Map();
+  for (const t of open) if (t.due >= start && t.due <= end) { if (!dueOn.has(t.due)) dueOn.set(t.due, []); dueOn.get(t.due).push(t); }
+  let cells = '';
+  for (let i = 0; i < 21; i++) {
+    const d = addDays(start, i);
+    const list = dueOn.get(d) || [];
+    const dd = fromYmd(d);
+    const label = `${fmtLong(d)}${list.length ? ': due ' + list.map((t) => t.title).join(', ') : ''}`;
+    cells += `<li class="ds-cell ${d < today ? 'is-past' : ''} ${d === today ? 'is-today' : ''} ${isRestDay(d) ? 'is-rest' : ''}" aria-label="${esc(label)}">
+      <span class="ds-num">${dd.getDate() === 1 || i === 0 ? esc(MON_S[dd.getMonth()]) + ' ' : ''}${dd.getDate()}</span>
+      <span class="ds-dots">${list.slice(0, 3).map((t) => `<span class="dot" style="--c:${colorOf(t.classId)}"></span>`).join('')}</span></li>`;
+  }
+  const soon = open.filter((t) => t.due >= today).sort((a, b) => (a.due < b.due ? -1 : a.due > b.due ? 1 : 0)).slice(0, 4);
+  const late = open.filter((t) => t.due < today).length;
+  const rows = soon.map((t) => {
+    const startDay = isProject(t) ? t.steps.filter((x) => !x.done && x.doOn).map((x) => x.doOn).sort()[0] : t.doOn;
+    const plan = startDay ? `<span class="small muted">Working on it ${esc(dayWord(startDay).toLowerCase() === 'today' ? 'today' : dayWord(startDay))}</span>` : '<span class="tag tag-warn">No start day yet</span>';
+    return `<li><button class="ds-item" data-act="editTask" data-id="${esc(t.id)}"><span class="dot" style="--c:${colorOf(t.classId)}"></span><span class="ds-t"><b>${esc(t.title)}</b>${plan}</span><span class="ds-due">${esc(dueText(t.due))}</span></button></li>`;
+  }).join('');
+  return `<div class="duestrip" aria-labelledby="ds-title">
+    <div class="ds-head"><h2 id="ds-title">The next three weeks</h2><p class="small muted">Crossed-off days are gone. Dots are due dates. “Due in three weeks” is only 15 school days.</p></div>
+    <div class="ds-scroll"><div class="ds-dow" aria-hidden="true">${['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((x) => `<span>${x}</span>`).join('')}</div><ol class="ds-grid">${cells}</ol></div>
+    ${rows ? `<ul class="ds-list">${rows}</ul>` : '<p class="small muted">No due dates yet. Add one to a task and it shows up here.</p>'}
+    ${late ? `<p class="small warn">${late} ${late === 1 ? 'task is' : 'tasks are'} past the due date.</p>` : ''}
+  </div>`;
+}
 function cardHtml(t, today) {
   const tags = [];
   if (!t.done) {
@@ -1678,7 +2290,7 @@ function cardHtml(t, today) {
     if (t.unsure) tags.push('<span class="tag tag-amber">Check if there is any</span>');
     if (t.hard) tags.push('<span class="tag tag-amber">Hard right now</span>');
     if (t.launch) tags.push('<span class="tag tag-ok">Good starter</span>');
-    if (t.due) tags.push(`<span class="tag">Due ${esc(fmtShort(t.due))}</span>`);
+    if (t.due) tags.push(`<span class="tag ${t.due <= addDays(today, 1) ? 'tag-warn' : ''}">${esc(dueText(t.due))}, ${esc(fmtShort(t.due))}</span>`);
     const qs = t.questions.filter((q) => !q.asked).length;
     if (qs) tags.push(`<span class="tag">${qs} ${qs === 1 ? 'question' : 'questions'} to ask</span>`);
   }
@@ -1703,54 +2315,147 @@ function cardHtml(t, today) {
 // ---------- render: playbook
 function viewPlaybook() {
   const sk = (m) => skyAt(m);
+  const rule = (state.settings.missedRule || '').trim();
+  const restNames = state.settings.restDays.length ? state.settings.restDays.slice().sort().map((d) => DOW_L[d] + 's').join(' and ') : '';
   let h = `<section aria-labelledby="pb-title">
     <div class="viewhead"><div><h1 id="pb-title">Playbook</h1><p>The ideas this app is built on, plus what your own days are showing you.</p></div></div>
     <div class="pb-grid">
       <div class="pb flow"><h2>Your afternoon, in order</h2>
         <ol class="flowsteps">
-          <li style="--sk:${sk(900)}"><strong>Plan the day</strong><span>Two minutes. Check what homework is real, pick what fits, choose a starter.</span></li>
+          <li style="--sk:${sk(900)}"><strong>Plan the day</strong><span>Your week is already in: sleep, school, travel. Two minutes to pick homework that fits the open time and choose a starter.</span></li>
+          <li style="--sk:${sk(930)}"><strong>Head start</strong><span>Five minutes on the hardest thing, then stop. It’s already open when you come back.</span></li>
           <li style="--sk:${sk(960)}"><strong>Rest on purpose</strong><span>Planned rest with a timer, then the dog walk.</span></li>
-          <li style="--sk:${sk(1020)}"><strong>Launch</strong><span>Back from the walk? Start the easy task you picked. No willpower needed.</span></li>
-          <li style="--sk:${sk(1100)}"><strong>Hard work while fresh</strong><span>25-minute focus blocks, phone in another room.</span></li>
-          <li style="--sk:${sk(1260)}"><strong>Review</strong><span>One minute at the end: when you started and what helped.</span></li>
+          <li style="--sk:${sk(1020)}"><strong>Launch</strong><span>Back from the walk? Just start the easy task. Two minutes is enough to count.</span></li>
+          <li style="--sk:${sk(1100)}"><strong>Hard work, one thing at a time</strong><span>Focus blocks with your phone in another room, and a ten-minute break with an end between tasks.</span></li>
+          <li style="--sk:${sk(1260)}"><strong>Review</strong><span>One minute: what felt easiest, what felt hardest. Then plan tomorrow while it’s fresh.</span></li>
         </ol>
       </div>
+      <div class="pb"><h2>The anti-schedule</h2><ul>
+        <li><strong>Commitments go in first.</strong><span>Sleep, school, travel, practice, meals. What’s left over is open time, and that’s your real budget for homework, not the hours on the clock.</span></li>
+        <li><strong>Sleep isn’t leftover time.</strong><span>Teens need about 8 to 10 hours. A short night makes the next day’s starting and focusing harder, so homework works around sleep, not the other way round.</span></li>
+        <li><strong>Fun goes on the plan too.</strong><span>Rest, the dog walk and music hour are planned, not earned. Knowing they’re coming makes the work in between easier to start.</span></li>
+        <li><strong>Count work after you do it.</strong><span>Focus mode records real time. Seeing what you actually did is more encouraging, and more accurate, than a list of what you meant to do.</span></li>
+        <li><strong>Small open chunks count.</strong><span>A 30-minute gap is enough for one step. Not every piece of homework needs a whole evening.</span></li>
+      </ul></div>
+      ${patternsHtml()}
       ${startsHtml()}
       ${questionsHtml()}
-      <div class="pb"><h2>Why the freeze happens</h2><ul>
-        <li><strong>Starting is the problem, not planning.</strong><span>You already finish everything between 6 and 9. The goal is to start earlier, not to work harder.</span></li>
-        <li><strong>The deadline effect.</strong><span>At 3 PM the deadline feels far away, so nothing feels urgent until the panic shows up around 6.</span></li>
-        <li><strong>A vague pile feels huge.</strong><span>Six tasks in your head feel like one big threat. Games and scrolling are a quick escape from that feeling.</span></li>
+      <div class="pb"><h2>Why starting is the hard part</h2><ul>
+        <li><strong>Starting has a toll at the door.</strong><span>Boring or scary work doesn’t give your brain much reward, so the first two minutes feel far harder than the work itself. That’s brain chemistry, not laziness, and it gets easier once you’re moving.</span></li>
+        <li><strong>“Due in three weeks” feels like nothing.</strong><span>Until the night before, when it suddenly feels like everything. The deadline isn’t motivation, it’s just the only signal loud enough. So make time visible: the strip on the Board, and a start day for every due date.</span></li>
+        <li><strong>A whole pile feels like one big threat.</strong><span>That’s why the Day view shows one thing at a time. Your brain only has to say yes to something it can survive.</span></li>
+        <li><strong>“Almost ready” feels safe.</strong><span>Notes, playlist, the perfect plan: setting up feels productive, which is what makes it sneaky. A rough start isn’t evidence against you.</span></li>
+      </ul></div>
+      <div class="pb"><h2>Starting and keeping going</h2><ul>
+        <li><strong>Just two minutes.</strong><span>Start a timer, do the ugliest first step, and you’re allowed to stop when it rings. If you keep going, that was your choice.</span></li>
+        <li><strong>Start badly on purpose.</strong><span>One ugly sentence, one half-tried problem. A bad first minute beats circling for an hour.</span></li>
+        <li><strong>A launch task.</strong><span>Something easy with a fixed length, like a video, gets you into your hardest subject.</span></li>
+        <li><strong>When X, I do Y.</strong><span>Tie your start to a trigger, like coming back from the dog walk.</span></li>
+        <li><strong>A reward after, not before.</strong><span>A song, a snack, five minutes of a show, right after the first chunk of work. Borrowed fuel still counts.</span></li>
+        <li><strong>Borrow someone’s momentum.</strong><span>Text a friend “starting my homework now”, or start at the same time as someone else.</span></li>
+        <li><strong>A limit on being stuck.</strong><span>After about ${state.settings.stuckMin} minutes on one problem, write the question down and move on.</span></li>
+      </ul></div>
+      <div class="pb"><h2>When it all feels like too much</h2><ul>
+        <li><strong>Cover the list.</strong><span>One thing at a time. Hide everything else until it’s done.</span></li>
+        <li><strong>Name the wave.</strong><span>“I’m flooded right now, not broken.” One word for the feeling moves you from drowning in it to watching it.</span></li>
+        <li><strong>Body before books.</strong><span>Leave the desk, drink water, breathe out slower than you breathe in. A flooded brain can’t start, however hard it tries.</span></li>
+        <li><strong>Shrink it until it’s silly.</strong><span>One problem, one sentence, one line. There’s always a size your brain will say yes to.</span></li>
+        <li><strong>Say it early.</strong><span>“I’m close to the wall” is information, not drama. The “I’ve hit a wall” button runs all of this for you.</span></li>
+      </ul></div>
+      <div class="pb"><h2>Between tasks</h2><ul>
+        <li><strong>Give the gap a shape.</strong><span>Finishing something starts a ${state.settings.gapMin}-minute break with a visible timer. The break is allowed. It just isn’t allowed to be bottomless.</span></li>
+        <li><strong>Pick a break that ends.</strong><span>Water, a stretch, a walk to the window. Scrolling has no floor, and an absorbing video can turn ten minutes into two hours.</span></li>
+        <li><strong>Count the seams.</strong><span>Breaks between tasks go on the plan as real time, so the capacity check is honest.</span></li>
       </ul></div>
       <div class="pb"><h2>Seeing the work clearly</h2><ul>
         <li><strong>Write it down with estimates.</strong><span>The pile turns into ordinary tasks with sizes.</span></li>
-        <li><strong>Pad for difficulty.</strong><span>Give extra time to what you’re struggling with, or what you haven’t done before.</span></li>
+        <li><strong>Check your guesses.</strong><span>Focus mode compares your estimate with the time it really took. Your patterns show which classes run long.</span></li>
         <li><strong>Turn “if any” into yes or no.</strong><span>A two-minute check removes the uncertainty that feeds the freeze.</span></li>
         <li><strong>Break projects into actions.</strong><span>“Bend wires to the drawn lengths” is startable. “Finish the jewelry” isn’t. Count testing and wrapping as steps too.</span></li>
       </ul></div>
       <div class="pb"><h2>Fitting it into your time</h2><ul>
-        <li><strong>Boundaries first.</strong><span>Your 9 PM wind-down and your music hour go in before anything else.</span></li>
-        <li><strong>Capacity check.</strong><span>If the total doesn’t fit, decide what moves before the day starts, and keep some breathing room.</span></li>
+        <li><strong>Commitments first.</strong><span>Sleep, school, travel, your wind-down and your music hour go in before any homework. Your week holds the ones that repeat.</span></li>
+        <li><strong>Plan backward.</strong><span>Due date, then a start day, written down. The start day is a signal your brain can’t get from the due date alone.</span></li>
         <li><strong>Reschedule, don’t postpone.</strong><span>A moved task needs a new day. Make sure it moved because of its deadline, not because it’s the hardest.</span></li>
-        <li><strong>Plan backward.</strong><span>Start from the due date, count the sessions, put them on days. An earlier finish date builds in a buffer.</span></li>
-        <li><strong>Group and split.</strong><span>Short steps fill small gaps. Long tiring ones, like soldering, go in two sessions.</span></li>
-      </ul></div>
-      <div class="pb"><h2>Starting and keeping going</h2><ul>
-        <li><strong>A launch task.</strong><span>Something easy with a fixed length, like a video, gets you into your hardest subject.</span></li>
-        <li><strong>When X, I do Y.</strong><span>Tie your start to a trigger, like coming back from the dog walk. Pick breaks that end on their own.</span></li>
-        <li><strong>A limit on being stuck.</strong><span>After about ${state.settings.stuckMin} minutes on one problem, write the question down and move on.</span></li>
-        <li><strong>Be kind after a rough day.</strong><span>Beating yourself up makes the next start harder. Note what got in the way and try again tomorrow.</span></li>
+        <li><strong>Decide tonight.</strong><span>Planning tomorrow after your review spares tomorrow’s willpower.</span></li>
       </ul></div>
       <div class="pb"><h2>When perfectionism shows up</h2><ul>
         <li><strong>Write what “done” looks like.</strong><span>Your music goal is the model: the hard measures, at 70 bpm, comfortably. When you hit the line, stop.</span></li>
+        <li><strong>A garbage draft first.</strong><span>Write fast, on purpose, for nobody. You can’t fail a draft that doesn’t count, and fixing is the easy part once anything exists.</span></li>
+        <li><strong>Making and fixing are separate.</strong><span>No delete key while making. Fixing gets its own sitting later.</span></li>
         <li><strong>Treat estimates as time limits.</strong><span>When focus mode reaches your estimate, check your “done” line before you keep polishing.</span></li>
-        <li><strong>Rough first, polish later.</strong><span>For written answers, get a rough version down first. Improve it only if there’s time left.</span></li>
+        <li><strong>Hand in one thing at 80%.</strong><span>Once a week, on something low-stakes. Collecting proof that nothing bad happens is how the fear shrinks.</span></li>
+      </ul></div>
+      <div class="pb"><h2>When a day goes sideways</h2><ul>
+        <li><strong>Your missed-day rule.</strong><span>${rule ? `“${esc(rule)}”` : 'Write one in Settings.'} A system with a written restart can’t be ruined by one bad Tuesday.</span></li>
+        <li><strong>Count comebacks, not streaks.</strong><span>Launchpad never counts streaks. It counts the times you came back after a missed day, because that’s the real skill.</span></li>
+        <li><strong>A planned day off.</strong><span>${restNames ? `${esc(restNames)} are rest days for your system.` : 'Pick a rest day in Settings.'} A planned gap teaches your brain that a gap is survivable.</span></li>
+        <li><strong>The 24-hour rule.</strong><span>Don’t give up on a system the day it feels ruined. That feeling is loudest right after a miss and mostly gone by tomorrow.</span></li>
+        <li><strong>Be kind after a rough day.</strong><span>Beating yourself up makes the next start harder. Note what got in the way and try again tomorrow.</span></li>
+      </ul></div>
+      <div class="pb"><h2>When you freeze in the moment</h2><ul>
+        <li><strong>Buy time out loud.</strong><span>Keep one sentence ready: “Give me a second, I’m thinking.” It keeps you in the room while your brain catches up.</span></li>
+        <li><strong>Find one detail.</strong><span>Name one real thing around you: the colour of the wall, your feet on the floor. It gives your brain a way back.</span></li>
+        <li><strong>Warm the body up.</strong><span>Press your feet into the floor, squeeze your hands, wiggle your fingers, breathe out slowly.</span></li>
+        <li><strong>Send the late answer anyway.</strong><span>Your best reply often shows up hours later. Send it. It proves your brain works fine, just on a delay.</span></li>
+      </ul></div>
+      <div class="pb"><h2>On test day</h2><ul>
+        <li><strong>Dump it before it locks.</strong><span>First minute: write the formulas and facts you’re scared of losing in the margin.</span></li>
+        <li><strong>Read twice, underline the ask.</strong><span>The second read is where “not”, “except” and “both” live. Most lost marks die right there.</span></li>
+        <li><strong>Show every step.</strong><span>Marks live on the paper, not in your head, even for steps your brain does instantly.</span></li>
+        <li><strong>Hold it for five minutes.</strong><span>Finished early? Don’t hand it in yet. Reread the last three questions and check each answer matches what was asked.</span></li>
+        <li><strong>Count the leak.</strong><span>On your last returned test, tally the marks lost to speed, not knowledge. That’s your cheapest possible raise.</span></li>
       </ul></div>
       ${reviewsHtml()}
     </div>
     <p class="syncnote js-sync">${esc(syncText())}</p>
   </section>`;
   return h;
+}
+// patterns over two weeks: noticing what keeps showing up, not judging one day
+function patternsHtml() {
+  const today = todayYmd();
+  const N = 14;
+  let started = 0, comebacks = 0;
+  const walls = [], seams = [], hardest = new Map(), easiest = new Map();
+  const bump = (m, k) => { if (k) m.set(k, (m.get(k) || 0) + 1); };
+  for (let i = 0; i < N; i++) {
+    const d = addDays(today, -i);
+    const day = state.days[d];
+    if (!day) continue;
+    if (dayCounted(d)) started++;
+    if (isComeback(d)) comebacks++;
+    const a = auditOf(d);
+    walls.push(...a.walls);
+    seams.push(...a.seams);
+    if (day.review) { bump(hardest, day.review.hardestClass || day.review.hardest); bump(easiest, day.review.easiestClass || day.review.easiest); }
+  }
+  const nameOf = (k) => (cls(k) ? cls(k).name : k);
+  const top = (m) => [...m.entries()].sort((a, b) => b[1] - a[1])[0];
+  const lines = [];
+  if (started) lines.push(`<li><strong>You started something on ${started} ${started === 1 ? 'day' : 'days'}.</strong><span>A day counts if you started one thing, even for two minutes.</span></li>`);
+  lines.push(`<li><strong>${comebacks ? `You came back after a missed day ${comebacks} ${comebacks === 1 ? 'time' : 'times'}.` : 'No comebacks needed lately.'}</strong><span>${comebacks ? 'That’s the number that matters. Missing a day is normal; coming back is the skill.' : 'When a day gets missed, the day you come back gets counted here.'}</span></li>`);
+  if (seams.length) {
+    const avg = Math.round(seams.reduce((x, y) => x + y.gap, 0) / seams.length);
+    const long = seams.filter((x) => x.gap > state.settings.gapMin + 10).length;
+    lines.push(`<li><strong>Breaks between tasks ran about ${fmtDur(avg)}.</strong><span>${long ? `${long} of ${seams.length} went past ${fmtDur(state.settings.gapMin + 10)}. Those are the leaks worth capping.` : `Your plan gives them ${fmtDur(state.settings.gapMin)}. That’s close.`}</span></li>`);
+  }
+  const ratios = state.classes.map((c) => ({ c, r: classRatio(c.id) })).filter((x) => x.r.n >= 2);
+  if (ratios.length) {
+    const txt = ratios.map((x) => `${x.c.name} ${x.r.ratio >= 1.15 ? `took ${x.r.ratio.toFixed(1)}× your guess` : x.r.ratio <= 0.85 ? 'went faster than you guessed' : 'matched your guess'}`).join('; ');
+    lines.push(`<li><strong>Your guesses against the clock</strong><span>${esc(txt)}. Use this when you estimate, especially for anything that runs long.</span></li>`);
+  }
+  if (walls.length) {
+    const words = new Map(); walls.forEach((w) => bump(words, w.word));
+    const w = top(words);
+    lines.push(`<li><strong>You hit a wall ${walls.length} ${walls.length === 1 ? 'time' : 'times'}${w ? `, most often “${esc(w[0].toLowerCase())}”` : ''}.</strong><span>Look at when it happens. Is it a time of day, a class, or a pile that got too big?</span></li>`);
+  }
+  const h1 = top(hardest), e1 = top(easiest);
+  if (h1 || e1) lines.push(`<li><strong>${h1 ? `Hardest most often: ${esc(nameOf(h1[0]))}.` : ''}${h1 && e1 ? ' ' : ''}${e1 ? `Easiest: ${esc(nameOf(e1[0]))}.` : ''}</strong><span>Hard things go early while you’re fresh. Easy things make good starters.</span></li>`);
+  const body = started || walls.length || seams.length
+    ? `<ul>${lines.join('')}</ul>`
+    : '<p class="muted">After a few days of focus mode and one-minute reviews, this shows what keeps happening: when you start, how long breaks run, which classes take longer than you guess. Patterns are more accurate than any one day.</p>';
+  return `<div class="pb"><h2>Your last two weeks</h2>${body}</div>`;
 }
 function startsHtml() {
   const today = todayYmd();
@@ -1767,7 +2472,7 @@ function startsHtml() {
   const pos = (m) => Math.max(0, Math.min(100, ((m - lo) / (hi - lo)) * 100));
   let body;
   if (!rows.length) {
-    body = '<p class="muted">Your start times will show up here. They’re recorded the first time you press Start in focus mode each day, or when you fill in your review.</p>';
+    body = '<p class="muted">Your start times will show up here. They’re recorded the first time you start a timer in focus mode each day, even a two-minute one, or when you fill in your review.</p>';
   } else {
     const avg = Math.round(rows.reduce((s, r) => s + r.st, 0) / rows.length);
     body = `<p class="small muted" style="margin-bottom:10px">Average over these days: <strong>${esc(fmtTime(avg))}</strong>. The dashed line is 6 PM, your old start time.</p>
@@ -1798,7 +2503,7 @@ function renderSheet(focusFirst) {
   const s = ui.sheet;
   if (!s) { root.innerHTML = ''; return; }
   const scrollTop = root.querySelector('.sheet') ? root.querySelector('.sheet').scrollTop : 0;
-  const content = ({ plan: sheetPlan, item: sheetItem, add: sheetAdd, window: sheetWindow, review: sheetReview, task: sheetTask, klass: sheetClass, settings: sheetSettings, sync: sheetSync, confirm: sheetConfirm })[s.kind](s);
+  const content = ({ plan: sheetPlan, item: sheetItem, add: sheetAdd, window: sheetWindow, review: sheetReview, task: sheetTask, klass: sheetClass, settings: sheetSettings, sync: sheetSync, confirm: sheetConfirm, week: sheetWeek, event: sheetEvent, occ: sheetOcc })[s.kind](s);
   root.innerHTML = `<div class="scrim" data-act="closeSheet"></div><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">${content}</div>`;
   document.body.style.overflow = 'hidden';
   const sheet = root.querySelector('.sheet');
@@ -1836,26 +2541,28 @@ function sheetPlan(s) {
   if (s.step === 2) {
     const win = windowFor(s.date);
     const total = cands.filter((c) => s.sel[c.key]).reduce((a, c) => a + c.min, 0);
+    const seams = state.settings.gapMin * Math.max(0, cands.filter((c) => s.sel[c.key] && c.type !== 'routine').length - 1);
     const groups = [
       ['today', 'Planned for this day'],
-      ['late', 'Carried over from an earlier day'],
+      ['late', 'Carried over. Not a debt: pick what fits today and give the rest a new day.'],
       ['unplanned', 'Not planned yet'],
       ['later', 'Planned for later. Pull one in to get ahead.'],
       ['routine', 'Routines'],
     ];
     const cap = capacityFor(s.date);
-    let body = meterHtml(total, cap.len, cap.live ? `${fmtDur(total)} picked, ${fmtDur(cap.len)} until wind-down` : null);
+    const brk = seams ? `, plus ${fmtDur(seams)} of breaks between tasks` : '';
+    let body = meterHtml(total + seams, cap.len, cap.live ? `${fmtDur(total)} picked${brk}. ${fmtDur(cap.len)} open before wind-down` : `${fmtDur(total)} picked${brk}, out of ${fmtDur(cap.len)} open`) + fixedSummary(s.date);
     for (const [g, label] of groups) {
       const list = cands.filter((c) => c.group === g);
       if (!list.length) continue;
       body += `<div class="group-title">${esc(label)}</div>`;
       body += list.map((c) => `<label class="pick"><input type="checkbox" data-change="planPick" data-key="${esc(c.key)}" ${s.sel[c.key] ? 'checked' : ''}>
         ${c.emoji ? `<span aria-hidden="true">${esc(c.emoji)}</span>` : `<span class="dot" style="--c:${colorOf(c.classId)}"></span>`}
-        <span class="pick-title">${esc(c.title)}${c.sub ? `<small>${esc(c.sub)}</small>` : ''}${c.group === 'late' && c.doOn ? `<small>Was planned for ${esc(fmtShort(c.doOn))}</small>` : ''}${c.group === 'later' && c.doOn ? `<small>Planned for ${esc(fmtShort(c.doOn))}</small>` : ''}${c.unsure ? '<small>Not checked yet</small>' : ''}${c.fallback ? '<small>Because there’s no homework</small>' : ''}</span>
+        <span class="pick-title">${esc(c.title)}${c.sub ? `<small>${esc(c.sub)}</small>` : ''}${c.group === 'late' && c.doOn ? `<small>Was planned for ${esc(fmtShort(c.doOn))}</small>` : ''}${c.group === 'later' && c.doOn ? `<small>Planned for ${esc(fmtShort(c.doOn))}</small>` : ''}${c.unsure ? '<small>Not checked yet</small>' : ''}${c.fallback ? '<small>Because there’s no homework</small>' : ''}${c.due ? `<small>${esc(dueText(c.due))}</small>` : ''}</span>
         <span class="pick-min">${fmtDur(c.min)}</span></label>`).join('');
     }
     if (!cands.length) body += '<div class="callout">There’s nothing to plan yet. Add tasks on the Board or routines in Settings.</div>';
-    return `${sheetHead('Pick what fits', `Step 2 of 3. Everything checked has to fit before ${esc(fmtTime(win.end))}.`)}${ind}${body}
+    return `${sheetHead('Pick what fits', `Step 2 of 3. Everything checked has to fit in the open time before ${esc(fmtTime(win.end))}.`)}${ind}${body}
       <div class="sheet-foot"><button class="btn spacer" data-act="planBack">Back</button><button class="btn primary" data-act="planNext">Next: pick a starter</button></div>`;
   }
   // step 3
@@ -1866,7 +2573,15 @@ function sheetPlan(s) {
       <span class="pick-title">${esc(c.title)}${c.firstStep ? `<small>First step: ${esc(c.firstStep)}</small>` : ''}${c.hard ? '<small>Marked hard. Better later, while you’re warmed up.</small>' : ''}</span>
       <span class="pick-min">${fmtDur(c.min)}</span></label>`).join('')
     : '<div class="callout">No tasks picked, only routines. That’s fine for a day off.</div>';
-  return `${sheetHead('Pick a starter', 'Step 3 of 3. Choose something easy with a clear end. It goes right after your “before homework” routines, so starting doesn’t take willpower.')}${ind}${body}
+  const hs = hasBeforeRoutine(cands, s.sel) ? headStartPick(cands, s.sel, s.launch) : null;
+  if (s.headStart == null) s.headStart = !!hs;
+  const dayNow = getDay(s.date);
+  const reward = s.reward != null ? s.reward : (dayNow ? dayNow.reward : '');
+  const extras = pool.length ? `
+    ${hs ? `<div class="group-title">Before you rest</div>
+    <label class="check"><input type="checkbox" data-change="planHeadStart" ${s.headStart ? 'checked' : ''}><span><b>Five-minute head start on ${esc(hs.title)}</b><small>Open it and do the ugliest first step, then stop. Coming back to something already started is much cheaper than starting cold.</small></span></label>` : ''}
+    <label class="field"><span>Your reward after the starter (optional)</span><input class="input" id="p-reward" value="${esc(reward)}" placeholder="One song, a snack, five minutes of a show" maxlength="80"><small>It comes right after the first chunk of work, not before it.</small></label>` : '';
+  return `${sheetHead('Pick a starter', 'Step 3 of 3. Choose something easy with a clear end. It goes right after your “before homework” routines, so starting doesn’t take willpower.')}${ind}${body}${extras}
     <div class="sheet-foot"><button class="btn spacer" data-act="planBack">Back</button><button class="btn primary" data-act="planBuild">Build my timeline</button></div>`;
 }
 function buildPlan(s) {
@@ -1887,7 +2602,7 @@ function buildPlan(s) {
     if (!s.sel[c.key]) { if (c.existing) clearDoOn(c, date); continue; }
     let it = c.existing;
     if (!it) {
-      it = { id: uid('i'), type: c.type, ref: c.ref || null, stepId: c.stepId || null, min: c.min, start: 0, done: false, title: null, classId: null, taskId: null };
+      it = { id: uid('i'), type: c.type, ref: c.ref || null, stepId: c.stepId || null, min: c.min, start: 0, done: false, title: null, classId: null, taskId: null, est: c.min, actual: 0, hs: false };
       if (c.type === 'custom') { it.title = c.title; it.classId = c.classId || null; it.taskId = c.taskId || null; }
       // pulled in from another day: take it off that day
       if (c.type === 'task' || c.type === 'step') {
@@ -1898,8 +2613,14 @@ function buildPlan(s) {
     setDoOn(c, date);
     if (s.launch === c.key) launchItemId = it.id;
   }
+  // a five-minute head start on the hardest thing, before the rest routines (one per day)
+  if (s.headStart && !items.some((i) => i.hs)) {
+    const hs = hasBeforeRoutine(cands, s.sel) ? headStartPick(cands, s.sel, s.launch) : null;
+    if (hs) items.push({ id: uid('i'), type: 'custom', ref: null, stepId: null, min: 5, start: 0, done: false, title: `Head start: ${hs.title}`, classId: hs.classId || null, taskId: hs.type === 'custom' ? hs.taskId || null : hs.ref, est: 5, actual: 0, hs: true });
+  }
   day.items = items;
   day.launchItemId = launchItemId;
+  if (s.reward != null) day.reward = String(s.reward).trim();
   arrange(date);
   return launchItemId ? findItem(date, launchItemId) : null;
 }
@@ -1948,31 +2669,216 @@ function sheetAdd(s) {
       <button class="mini" data-act="addCand" data-key="${esc(c.key)}" aria-label="Add ${esc(c.title)}">Add</button></div>`).join('');
   }
   if (!body) body = '<div class="callout">Everything open is already on this day.</div>';
-  return `${sheetHead('Add to this day', 'It goes into the first free slot. You can change the time after.')}${body}
+  return `${sheetHead('Add to this day', 'It goes into the first open slot. You can change the time after.')}
+    <div class="inline" style="margin-bottom:6px"><button class="btn" data-act="newEvent" data-kind="event" data-date="${esc(s.date)}">+ An event on this day</button></div>${body}
     <div class="sheet-foot"><button class="btn" data-act="closeSheet">Done</button></div>`;
+}
+
+// ---------- your week: the anti-schedule. Commitments go in first; what's left is open time.
+function daysText(e) {
+  if (e.date) return `${fmtShort(e.date)} only`;
+  const d = [...e.days].sort((a, b) => a - b).join(',');
+  if (e.kind === 'sleep') {
+    if (d === '0,1,2,3,4,5,6') return 'Every night';
+    if (d === '0,1,2,3,4') return 'School nights (Sun to Thu)';
+    if (d === '5,6') return 'Fri and Sat nights';
+  } else {
+    if (d === '0,1,2,3,4,5,6') return 'Every day';
+    if (d === '1,2,3,4,5') return 'Weekdays';
+    if (d === '0,6') return 'Weekends';
+  }
+  if (!d) return 'No days picked';
+  return [...e.days].sort((a, b) => a - b).map((x) => DOW_S[x]).join(', ') + (e.kind === 'sleep' ? ' nights' : '');
+}
+function evRowHtml(e) {
+  const c = e.kind === 'school' ? cls(e.classId) : null;
+  const travel = e.before || e.after ? `. Travel ${[e.before ? `${fmtDur(e.before)} there` : '', e.after ? `${fmtDur(e.after)} back` : ''].filter(Boolean).join(', ')}` : '';
+  return `<button class="evrow" data-act="editEvent" data-id="${esc(e.id)}"><span class="evr-emoji" style="--c:${c ? c.color : KIND[e.kind].color}" aria-hidden="true">${esc(e.emoji || KIND[e.kind].emoji)}</span>
+    <span class="evr-main"><b>${esc(e.name || KIND[e.kind].label)}${c ? ` <span class="muted">(${esc(c.name)})</span>` : ''}</b><small>${esc(fmtTime(e.start))} to ${esc(fmtTime(e.end))}, ${esc(daysText(e))}${esc(travel)}</small></span>
+    <span class="evr-go" aria-hidden="true">${ICON.right}</span></button>`;
+}
+function sheetWeek(s) {
+  const today = todayYmd();
+  const sec = (kind, title, help, add) => {
+    const list = state.events.filter((e) => e.kind === kind && (!e.date || e.date >= today)).sort((a, b) => ((a.date || '') < (b.date || '') ? -1 : (a.date || '') > (b.date || '') ? 1 : a.start - b.start));
+    return `<div class="group-title">${title}</div><p class="small muted">${help}</p>
+      ${list.length ? `<div class="evlist">${list.map(evRowHtml).join('')}</div>` : ''}
+      <button class="btn ghost addrow" data-act="newEvent" data-kind="${kind}">+ ${add}</button>`;
+  };
+  return `${sheetHead('Your week', 'The anti-schedule: commitments go in first. The time that’s left is what’s really open for homework.')}
+    ${sec('sleep', 'Sleep', 'Sleep goes in first and homework works around it. Teens need about 8 to 10 hours.', 'Add different sleep times')}
+    ${sec('school', 'School blocks', 'Link a block to a class and the questions you saved for that teacher show up in it. Tap a block on any day to set goals for it.', 'Add a block')}
+    ${sec('transit', 'Transit', 'Getting to school and back, or anywhere you go regularly. Events can also have their own travel time.', 'Add travel')}
+    ${sec('event', 'Other events', 'Practices, lessons, appointments, plans with friends. Every week, or one day only.', 'Add an event')}
+    <div class="sheet-foot"><button class="btn primary" data-act="weekBack">${s.back ? 'Back' : 'Done'}</button></div>`;
+}
+function newEventDraft(kind, date) {
+  const d = { id: uid('ev'), kind, name: '', emoji: KIND[kind].emoji, start: 960, end: 1050, days: [1, 2, 3, 4, 5], date: null, classId: '', before: 0, after: 0, schoolOnly: false, note: '' };
+  if (kind === 'sleep') {
+    const used = new Set(state.events.filter((e) => e.kind === 'sleep').flatMap((e) => e.days));
+    Object.assign(d, { name: 'Sleep', start: 1320, end: 420, days: [0, 1, 2, 3, 4, 5, 6].filter((x) => !used.has(x)) });
+  }
+  if (kind === 'school') {
+    const blocks = state.events.filter((e) => e.kind === 'school');
+    const last = [...blocks].sort((a, b) => b.end - a.end)[0];
+    const st = last ? Math.min(1350, last.end + 5) : 510;
+    Object.assign(d, { name: `Block ${blocks.length + 1}`, start: st, end: Math.min(1435, st + 80), days: last ? [...last.days] : [1, 2, 3, 4, 5] });
+  }
+  if (kind === 'transit') Object.assign(d, { start: 475, end: 505, schoolOnly: true });
+  if (kind === 'event') Object.assign(d, { start: 1080, end: 1170, days: date ? [] : [fromYmd(todayYmd()).getDay()], date: date || null });
+  return d;
+}
+function syncEventDraft() {
+  const s = ui.sheet; if (!s || s.kind !== 'event') return;
+  const d = s.draft; const v = (id) => $('#' + id);
+  if (v('e-name')) d.name = v('e-name').value;
+  if (v('e-emoji')) d.emoji = v('e-emoji').value.trim();
+  if (v('e-class')) d.classId = v('e-class').value;
+  const st = v('e-start') ? fromHHMM(v('e-start').value) : null; if (st != null) d.start = st;
+  const en = v('e-end') ? fromHHMM(v('e-end').value) : null; if (en != null) d.end = en;
+  if ($$('.e-day').length) d.days = $$('.e-day').filter((x) => x.checked).map((x) => Number(x.value));
+  if (v('e-date') && isYmd(v('e-date').value)) d.date = v('e-date').value;
+  if (v('e-before')) d.before = Math.max(0, num(v('e-before').value, 0));
+  if (v('e-after')) d.after = Math.max(0, num(v('e-after').value, 0));
+  if (v('e-school')) d.schoolOnly = v('e-school').checked;
+  if (v('e-note')) d.note = v('e-note').value;
+}
+function sheetEvent(s) {
+  const d = s.draft;
+  const k = d.kind;
+  const titles = { sleep: 'Sleep times', school: 'School block', transit: 'Travel', event: 'Event' };
+  const places = { sleep: 'Sleep', school: 'Block 1', transit: 'Bus to school', event: 'Soccer practice' };
+  const len = d.end <= d.start ? 1440 - d.start + d.end : d.end - d.start;
+  const dayChips = `<div class="field"><span>${k === 'sleep' ? 'Nights (the night you go to bed)' : 'Days'}</span><div class="daychips" role="group" aria-label="Days">${DOW_1.map((l, i) => `<label><input type="checkbox" class="e-day" value="${i}" ${d.days.includes(i) ? 'checked' : ''} aria-label="${DOW_L[i]}"><span>${l}</span></label>`).join('')}</div></div>`;
+  return `${sheetHead((s.isNew ? 'New ' + titles[k].toLowerCase() : titles[k]), k === 'sleep' ? 'Sleep is a commitment, not leftover time. Homework gets planned around it.' : 'It goes in before homework, so the open time you see is real.')}
+    <div class="row2 row-name">
+      <label class="field"><span>Name</span><input class="input" id="e-name" value="${esc(d.name)}" placeholder="${esc(places[k])}" maxlength="60"></label>
+      <label class="field"><span>Emoji</span><input class="input" id="e-emoji" value="${esc(d.emoji)}" maxlength="4"></label>
+    </div>
+    ${k === 'school' ? `<label class="field"><span>Class</span><select class="input" id="e-class"><option value="">No class (lunch, flex block)</option>${state.classes.map((c) => `<option value="${esc(c.id)}" ${c.id === d.classId ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}</select><small>Questions you save for this class show up in the block.</small></label>` : ''}
+    <div class="row2">
+      <label class="field"><span>${k === 'sleep' ? 'Bedtime' : 'Starts'}</span><input class="input" type="time" id="e-start" value="${toHHMM(d.start)}"></label>
+      <label class="field"><span>${k === 'sleep' ? 'Wake up' : 'Ends'}</span><input class="input" type="time" id="e-end" value="${toHHMM(d.end)}"></label>
+    </div>
+    ${k === 'sleep' ? `<p class="small ${len < 480 ? 'warn' : 'muted'}" style="margin:-6px 0 12px">That’s ${fmtDur(len)} of sleep.${len < 480 ? ' Less than 8 hours makes starting and focusing harder the next day.' : ''}</p>` : ''}
+    ${k === 'event' ? `<div class="field"><span>How often</span><div class="inline">
+      <button class="chip ${s.repeat === 'weekly' ? 'on' : ''}" data-act="eventRepeat" data-v="weekly" aria-pressed="${s.repeat === 'weekly'}">Every week</button>
+      <button class="chip ${s.repeat === 'once' ? 'on' : ''}" data-act="eventRepeat" data-v="once" aria-pressed="${s.repeat === 'once'}">One day only</button></div></div>` : ''}
+    ${s.repeat === 'once' ? `<label class="field"><span>Day</span><input class="input" type="date" id="e-date" value="${esc(d.date || ui.date)}"></label>` : dayChips}
+    ${k === 'event' ? `<div class="group-title">Travel time</div>
+      <div class="row2">
+        <label class="field"><span>Getting there (min)</span><input class="input" type="number" min="0" step="5" inputmode="numeric" id="e-before" value="${d.before}"></label>
+        <label class="field"><span>Getting back (min)</span><input class="input" type="number" min="0" step="5" inputmode="numeric" id="e-after" value="${d.after}"></label>
+      </div><p class="small muted" style="margin:-6px 0 12px">Travel shows up before and after, and counts against your open time.</p>` : ''}
+    ${k === 'transit' ? `<label class="check"><input type="checkbox" id="e-school" ${d.schoolOnly ? 'checked' : ''}><span><b>Only on school days</b><small>Skipped when you mark “No school this day”.</small></span></label>` : ''}
+    ${k === 'sleep' ? '' : `<label class="field"><span>${k === 'school' ? 'What this block is for (optional)' : 'Note (optional)'}</span><input class="input" id="e-note" value="${esc(d.note)}" placeholder="${k === 'school' ? 'Ask one question every class' : ''}" maxlength="120"></label>`}
+    <div class="sheet-foot">${s.isNew ? '' : '<button class="btn danger spacer" data-act="eventDelete">Delete</button>'}<button class="btn ${s.isNew ? 'spacer' : ''}" data-act="eventBack">${s.back ? 'Back' : 'Cancel'}</button><button class="btn primary" data-act="eventSave">Save</button></div>`;
+}
+// one day's occurrence of a commitment: goals for a school block, questions to ask, or skipping it this day
+function sheetOcc(s) {
+  const e = state.events.find((x) => x.id === s.evId);
+  if (!e) return `${sheetHead('Not found')}<p>This was deleted.</p><div class="sheet-foot"><button class="btn primary" data-act="closeSheet">Close</button></div>`;
+  const day = state.days[s.date];
+  const school = e.kind === 'school';
+  const c = school ? cls(e.classId) : null;
+  const off = !!(day && day.off.includes(e.id));
+  const noSchool = !!(day && day.noSchool);
+  const schoolish = school || (e.kind === 'transit' && e.schoolOnly);
+  const skipped = off || (noSchool && schoolish);
+  const crosses = e.end <= e.start;
+  const goals = day ? day.goals.filter((g) => g.eventId === e.id) : [];
+  const qs = school ? classQuestions(e.classId) : [];
+  return `${sheetHead(`${e.emoji || KIND[e.kind].emoji} ${e.name || KIND[e.kind].label}`, `${fmtLong(s.date)}, ${fmtTime(e.start)} to ${fmtTime(e.end)}${crosses ? ' the next morning' : ''}${c ? `. ${c.name}` : ''}`)}
+    ${skipped ? '<div class="callout">Not happening this day, so this time counts as open.</div>' : ''}
+    ${e.note ? `<div class="plan-box"><b class="small muted">${school ? 'This block is for' : 'Note'}</b><span>${esc(e.note)}</span></div>` : ''}
+    ${e.before || e.after ? `<p class="small muted">Travel: ${[e.before ? `${fmtDur(e.before)} getting there` : '', e.after ? `${fmtDur(e.after)} getting back` : ''].filter(Boolean).join(', ')}.</p>` : ''}
+    ${school ? `<div class="group-title">Your goals for this block</div>
+      ${goals.length ? `<ul class="goals goal-edit">${goals.map((g) => `<li><label class="goal ${g.done ? 'is-done' : ''}"><input type="checkbox" data-change="goalDone" data-date="${esc(s.date)}" data-id="${esc(g.id)}" ${g.done ? 'checked' : ''}><span>${esc(g.text)}</span></label><button class="mini" data-act="goalDel" data-id="${esc(g.id)}" aria-label="Remove goal: ${esc(g.text)}">Remove</button></li>`).join('')}</ul>` : ''}
+      <div class="goal-add"><input class="input" id="g-new" placeholder="Ask about question 4" maxlength="120" aria-label="New goal for this block"><button class="btn" data-act="goalAdd">Add</button></div>
+      <p class="small muted">Small and specific works best: one question to ask, or one thing to finish in class.</p>` : ''}
+    ${qs.length ? `<div class="group-title">Questions to ask</div><ul class="goals">${qs.map(({ t, q }) => `<li class="qrow"><span>${esc(q.text)}<small class="muted"> (${esc(t.title)})</small></span><button class="mini" data-act="askedQ" data-task="${esc(t.id)}" data-id="${esc(q.id)}">Asked</button></li>`).join('')}</ul>` : ''}
+    <div class="group-title">This day only</div>
+    <div class="inline">
+      <button class="btn" data-act="occOff">${off ? 'It’s back on this day' : 'Not happening this day'}</button>
+      ${schoolish ? `<button class="btn" data-act="noSchoolDay">${noSchool ? 'School is back on' : 'No school this day'}</button>` : ''}
+    </div>
+    <div class="sheet-foot"><button class="btn spacer" data-act="editEvent" data-id="${esc(e.id)}">${e.date ? 'Edit' : 'Edit for every week'}</button><button class="btn primary" data-act="closeSheet">Done</button></div>`;
+}
+// what's already committed inside the homework time, for the plan
+function fixedSummary(date) {
+  const win = windowFor(date);
+  const cap = capacityFor(date);
+  const from = cap.live ? Math.min(win.end, nowMin()) : win.start;
+  const by = new Map();
+  for (const o of occurrencesFor(date)) {
+    const m = Math.min(win.end, o.end) - Math.max(from, o.start);
+    if (m <= 0) continue;
+    const name = o.travel || o.kind === 'transit' ? 'travel' : o.kind === 'school' ? 'school' : o.kind === 'sleep' ? 'sleep' : o.ev.name || 'events';
+    by.set(name, (by.get(name) || 0) + m);
+  }
+  if (!by.size) return '';
+  return `<p class="small muted" style="margin:-4px 0 12px">Already in this time: ${esc([...by.entries()].map(([n, m]) => `${n} (${fmtDur(m)})`).join(', '))}. The meter only counts what’s left open.</p>`;
 }
 
 // window sheet
 function sheetWindow(s) {
   const win = windowFor(s.date);
-  return `${sheetHead('Your time window', 'When your afternoon starts, and when wind-down begins. Weekends and days off can be different.')}
+  return `${sheetHead('Homework time', 'When homework can start, and when wind-down begins. School, travel and events inside this time are worked around automatically. Weekends and days off can be different.')}
     <div class="row2">
-      <label class="field"><span>Starts</span><input class="input" type="time" id="w-start" value="${toHHMM(win.start)}"></label>
+      <label class="field"><span>Homework can start</span><input class="input" type="time" id="w-start" value="${toHHMM(win.start)}"></label>
       <label class="field"><span>Wind-down at</span><input class="input" type="time" id="w-end" value="${toHHMM(win.end)}"></label>
     </div>
     <div class="sheet-foot"><button class="btn spacer" data-act="windowSave" data-scope="default">Save as my usual</button><button class="btn primary" data-act="windowSave" data-scope="day">Save for ${esc(fmtShort(s.date))}</button></div>`;
 }
 
 // review sheet
+function auditHtml(date) {
+  const a = auditOf(date);
+  const lines = [];
+  if (a.start != null) lines.push(`<span>You started at <strong>${esc(fmtTime(a.start))}</strong>.</span>`);
+  if (a.seams.length) {
+    const tot = a.seams.reduce((x, y) => x + y.gap, 0);
+    const longest = a.seams.reduce((x, y) => (y.gap > x.gap ? y : x));
+    const after = longest.after && itemInfo(longest.after);
+    lines.push(`<span>${a.seams.length} ${a.seams.length === 1 ? 'break' : 'breaks'} between tasks, about <strong>${fmtDur(tot)}</strong> in total.${a.seams.length > 1 && after ? ` The longest was ${fmtDur(longest.gap)}, after ${esc(after.title)}.` : ''}</span>`);
+  }
+  for (const g of a.guesses.slice(0, 4)) lines.push(`<span>${esc(g.title)}: you guessed ${fmtDur(g.est)}, it took <strong>${fmtDur(g.actual)}</strong> of focus.</span>`);
+  if (a.walls.length) lines.push(`<span>You hit a wall ${a.walls.length === 1 ? 'once' : a.walls.length + ' times'}${a.walls[0].word ? ` (${esc(a.walls.map((w) => w.word.toLowerCase()).filter(Boolean).join(', '))})` : ''}, and came back.</span>`);
+  if (!lines.length) return '<div class="plan-box"><span class="muted">When you use focus mode, this fills in by itself: when you started, how long the breaks between tasks ran, and how your guesses compared with the clock.</span></div>';
+  return `<div class="plan-box"><b class="small muted">What the clock saw</b>${lines.join('')}</div>`;
+}
+function syncReviewDraft() {
+  const s = ui.sheet; if (!s || s.kind !== 'review') return;
+  for (const [k, id] of [['start', 'r-start'], ['helped', 'r-helped'], ['blocked', 'r-blocked'], ['kindNote', 'r-kind']]) { const el = $('#' + id); if (el) s[k] = el.value; }
+  const det = $('.morenotes'); if (det) s.notesOpen = det.open;
+}
 function sheetReview(s) {
   const day = getDay(s.date, true);
   const r = day.review || {};
-  const st = r.start != null ? r.start : day.firstStart;
-  return `${sheetHead('Review this day', 'One minute. No grades, just notes for tomorrow.')}
-    <label class="field"><span>What time did you start your first task?</span><input class="input" type="time" id="r-start" value="${st != null ? toHHMM(st) : ''}"><small>Filled in from focus mode if you used it.</small></label>
-    <label class="field"><span>What helped?</span><textarea class="input" id="r-helped" placeholder="The dog walk got me moving.">${esc(r.helped || '')}</textarea></label>
-    <label class="field"><span>What got in the way?</span><textarea class="input" id="r-blocked" placeholder="Opened my phone during a break.">${esc(r.blocked || '')}</textarea></label>
-    <label class="field"><span>Something kind to tell yourself</span><textarea class="input" id="r-kind" placeholder="I started an hour earlier than last week.">${esc(r.kind || '')}</textarea></label>
+  if (!s.init) {
+    s.init = true;
+    const st = r.start != null ? r.start : day.firstStart;
+    s.start = st != null ? toHHMM(st) : '';
+    s.helped = r.helped || ''; s.blocked = r.blocked || ''; s.kindNote = r.kind || '';
+    s.easiest = r.easiest || ''; s.hardest = r.hardest || '';
+  }
+  const work = day.items.filter((i) => isWork(i) && itemInfo(i)).sort((a, b) => a.start - b.start);
+  const titles = [...new Set(work.map((i) => itemInfo(i).title))];
+  for (const t of [s.easiest, s.hardest]) if (t && !titles.includes(t)) titles.push(t);
+  const chips = (field) => titles.length
+    ? `<div class="inline">${titles.map((t) => `<button class="chip ${s[field] === t ? 'on' : ''}" data-act="reviewPick" data-f="${field}" data-v="${esc(t)}" aria-pressed="${s[field] === t}">${esc(t)}</button>`).join('')}</div>`
+    : '<p class="small muted">Nothing was planned this day.</p>';
+  const notesOpen = !!(s.notesOpen || s.helped || s.blocked || s.kindNote);
+  return `${sheetHead('Review this day', 'One minute. No grades, just noticing.')}
+    ${auditHtml(s.date)}
+    <div class="field"><span>What felt easiest?</span>${chips('easiest')}</div>
+    <div class="field"><span>What felt hardest?</span>${chips('hardest')}</div>
+    <label class="field"><span>What time did you start your first task?</span><input class="input" type="time" id="r-start" value="${esc(s.start)}"><small>Filled in from focus mode if you used it.</small></label>
+    <details class="morenotes" ${notesOpen ? 'open' : ''}><summary>Add notes, if you want</summary>
+      <label class="field"><span>What helped?</span><textarea class="input" id="r-helped" placeholder="The dog walk got me moving.">${esc(s.helped)}</textarea></label>
+      <label class="field"><span>What got in the way? Just what happened, not how you felt about it.</span><textarea class="input" id="r-blocked" placeholder="Opened my phone during a break.">${esc(s.blocked)}</textarea></label>
+      <label class="field"><span>Something kind to tell yourself</span><textarea class="input" id="r-kind" placeholder="I started an hour earlier than last week.">${esc(s.kindNote)}</textarea></label>
+    </details>
     <div class="sheet-foot"><button class="btn" data-act="closeSheet">Cancel</button><button class="btn primary" data-act="reviewSave">Save review</button></div>`;
 }
 
@@ -2021,6 +2927,28 @@ function backwardBox(d) {
   if (lateSteps) lines.push(`<span class="warn">${lateSteps} ${lateSteps === 1 ? 'step is' : 'steps are'} planned after the finish date.</span>`);
   return `<div class="plan-box" id="t-backward">${lines.join('')}</div>`;
 }
+// due date help: how far away it is, and a start day with room to spare
+function dueHelpHtml(d) {
+  if (!d.due || d.steps.length) return '<div id="t-duehelp"></div>';
+  const today = todayYmd();
+  const n = daysBetween(today, d.due);
+  let suggest = addDays(d.due, d.min >= 60 ? -3 : -2);
+  if (suggest < today) suggest = today;
+  const lines = [`<span>${esc(dueText(d.due))}.</span>`];
+  if (d.doOn && d.doOn >= d.due && n > 0) lines.push('<span class="warn">That’s the day it’s due. Starting earlier leaves room if it takes longer than you think.</span>');
+  else if (!d.doOn) lines.push('<span class="muted">No start day yet, so it will feel far away until it suddenly isn’t.</span>');
+  const btn = n > 0 && (!d.doOn || d.doOn > suggest) && suggest < d.due ? `<div><button class="mini" data-act="taskDoOn" data-v="${esc(suggest)}">Start ${esc(dayWord(suggest) === 'Today' ? 'today' : dayWord(suggest))} instead</button></div>` : '';
+  return `<div class="plan-box" id="t-duehelp">${lines.join('')}${btn}</div>`;
+}
+// estimate help: how long this class has really taken lately, compared with your guesses
+function calibHtml(d) {
+  if (d.steps.length || !d.classId) return '<div id="t-calib"></div>';
+  const r = classRatio(d.classId);
+  const c = cls(d.classId);
+  if (r.n < 3 || r.ratio < 1.2 || !c) return '<div id="t-calib"></div>';
+  const better = round5(Math.max(5, d.min) * r.ratio);
+  return `<div class="callout amberbox small" id="t-calib">Lately your ${esc(c.name)} work has taken about ${r.ratio.toFixed(1)}× your guess (${r.n} tasks).${better > d.min ? ` <button class="mini" data-act="taskCalib" data-v="${better}">Use ${fmtDur(better)}</button>` : ''}</div>`;
+}
 function sheetTask(s) {
   const d = s.draft;
   const isNew = !d.id;
@@ -2044,6 +2972,7 @@ function sheetTask(s) {
       ${d.steps.length ? `<div class="field"><span>Estimate</span><div class="input" style="display:flex;align-items:center">${fmtDur(d.steps.reduce((a, x) => a + num(x.min, 0), 0))} from steps</div></div>`
       : `<label class="field"><span>Estimate (minutes)</span><input class="input" id="t-min" type="number" min="0" step="5" inputmode="numeric" value="${d.min}"></label>`}
     </div>
+    ${calibHtml(d)}
     <label class="check"><input type="checkbox" id="t-hard" data-change="taskToggle" ${d.hard ? 'checked' : ''}><span><b>Hard for me right now</b><small>Planned early, while you’re fresh.</small></span></label>
     ${d.hard && !d.steps.length ? `<div class="callout amberbox small" style="margin-top:-4px">Did your estimate include extra time for the struggle? <button class="mini" data-act="taskPad">Add 25%</button></div>` : ''}
     <label class="check"><input type="checkbox" id="t-launch" data-change="taskToggle" ${d.launch ? 'checked' : ''}><span><b>Good starter</b><small>Easy to begin with a clear end, like watching a video. Suggested as your first task.</small></span></label>
@@ -2056,6 +2985,7 @@ function sheetTask(s) {
       <label class="field"><span>${d.steps.length ? 'Finish by' : 'Due'}</span><input class="input" id="t-due" type="date" value="${d.due || ''}"></label>
     </div>
     ${d.steps.length ? '' : `<div class="inline" style="margin:-6px 0 14px"><button class="mini" data-act="taskDoOn" data-v="today">Today</button><button class="mini" data-act="taskDoOn" data-v="tomorrow">Tomorrow</button><button class="mini" data-act="taskDoOn" data-v="">No day yet</button></div>`}
+    ${dueHelpHtml(d)}
     <div class="fieldlabel">Steps</div>
     <p class="small muted" style="margin:2px 0 8px">For projects. Break it into actions you can start, including the finishing steps. Give each step a day.</p>
     ${backwardBox(d)}
@@ -2102,6 +3032,10 @@ function syncSettingsDraft() {
   d.settings.focusMin = Math.max(1, num($('#s-focus') && $('#s-focus').value, d.settings.focusMin));
   d.settings.breakMin = Math.max(1, num($('#s-break') && $('#s-break').value, d.settings.breakMin));
   d.settings.stuckMin = Math.max(1, num($('#s-stuck') && $('#s-stuck').value, d.settings.stuckMin));
+  if ($('#s-starter')) d.settings.starterMin = Math.max(1, num($('#s-starter').value, d.settings.starterMin));
+  if ($('#s-gap')) d.settings.gapMin = Math.max(0, num($('#s-gap').value, d.settings.gapMin));
+  if ($('#s-rule')) d.settings.missedRule = $('#s-rule').value.trim();
+  if ($$('.s-rest').length) d.settings.restDays = $$('.s-rest').filter((x) => x.checked).map((x) => Number(x.value));
   d.routines.forEach((r) => {
     const box = document.querySelector(`[data-routine="${CSS.escape(r.id)}"]`);
     if (!box) return;
@@ -2134,11 +3068,14 @@ function sheetSettings(s) {
       <button class="mini" data-act="routineDel" data-id="${esc(r.id)}">Delete</button></div>
     </div>`).join('');
   return `${sheetHead('Settings')}
-    <div class="group-title" style="margin-top:0">Your usual afternoon</div>
+    <div class="group-title" style="margin-top:0">Homework time</div>
     <div class="row2">
-      <label class="field"><span>Starts</span><input class="input" type="time" id="s-start" value="${toHHMM(d.settings.dayStart)}"></label>
+      <label class="field"><span>Homework can start</span><input class="input" type="time" id="s-start" value="${toHHMM(d.settings.dayStart)}"></label>
       <label class="field"><span>Wind-down at</span><input class="input" type="time" id="s-end" value="${toHHMM(d.settings.dayEnd)}"></label>
     </div>
+    <div class="group-title">Your week</div>
+    <p class="small muted" style="margin-bottom:8px">Sleep, school blocks, travel and other events. They go in first, and homework fits around them.</p>
+    <button class="btn" data-act="openWeek" style="margin-bottom:6px">Edit your week</button>
     <div class="group-title">Routines</div>
     <p class="small muted" style="margin-bottom:10px">These show up when you plan a day. “Before homework” routines make good triggers: when the dog walk ends, your starter task begins.</p>
     ${routines}
@@ -2149,6 +3086,13 @@ function sheetSettings(s) {
       <label class="field"><span>Break (min)</span><input class="input" type="number" id="s-break" min="1" inputmode="numeric" value="${d.settings.breakMin}"></label>
     </div>
     <label class="field"><span>Stuck limit (min)</span><input class="input" type="number" id="s-stuck" min="1" inputmode="numeric" value="${d.settings.stuckMin}"><small>After this long on one problem, write the question down and move on.</small></label>
+    <div class="row2">
+      <label class="field"><span>“Just start” timer (min)</span><input class="input" type="number" id="s-starter" min="1" inputmode="numeric" value="${d.settings.starterMin}"><small>Small enough that you’re allowed to stop.</small></label>
+      <label class="field"><span>Break between tasks (min)</span><input class="input" type="number" id="s-gap" min="0" inputmode="numeric" value="${d.settings.gapMin}"><small>Planned, with a timer. 0 turns it off.</small></label>
+    </div>
+    <div class="group-title">Missed days</div>
+    <label class="field"><span>Your missed-day rule</span><textarea class="input" id="s-rule" placeholder="${esc(MISSED_RULE)}">${esc(d.settings.missedRule)}</textarea><small>Shown when you come back after a missed day.</small></label>
+    <div class="field"><span>Rest days for your system</span><div class="daychips" role="group" aria-label="Rest days">${DOW_1.map((l, i) => `<label><input type="checkbox" class="s-rest" value="${i}" ${d.settings.restDays.includes(i) ? 'checked' : ''} aria-label="${DOW_L[i]}"><span>${l}</span></label>`).join('')}</div><small>No plan or review needed, and nothing counts as missed. Homework can still happen.</small></div>
     ${gh.ns ? `<div class="group-title">Syncing</div>
     <div class="inline" style="margin-bottom:10px;justify-content:space-between;flex-wrap:nowrap"><p class="small" style="margin:0">${gh.connected ? `On, through ${esc(gh.owner)}/${esc(gh.repo)} on GitHub.` : 'Off. Turn it on to share one plan between your Mac and your phone.'}</p><button class="btn" data-act="openSync" style="flex:none">${gh.connected ? 'Sync settings' : 'Set up syncing'}</button></div>` : ''}
     <p class="small muted js-sync">${esc(syncText())}</p>
@@ -2198,64 +3142,120 @@ function sheetConfirm(s) {
 }
 
 // ---------- focus mode
-function openFocus(date, itemId) {
+// modes: 'focus' and 'break' (blocks), 'timer' (routines and the head start), 'starter' (just start, a couple of
+// minutes with permission to stop), 'reset' (five minutes of body-first after hitting a wall)
+function openFocus(date, itemId, opts) {
+  opts = opts || {};
   const it = findItem(date, itemId);
   if (!it) return;
   if (ui.focus && ui.focus.itemId !== itemId) endFocus(true);
   if (!ui.focus) {
-    const isRoutine = !!(itemInfo(it) && itemInfo(it).routine);
-    ui.focus = { date, itemId, mode: isRoutine ? 'timer' : 'focus', running: false, remaining: isRoutine ? it.min * 60000 : state.settings.focusMin * 60000, timeUp: false, endsAt: 0, lastTick: 0, rounds: 0, elapsed: 0, stuckEndsAt: null, stuckPrompt: false, overrun: false, overrunShown: false, qDraft: '', hidden: false };
+    const inf = itemInfo(it);
+    const timed = !!(inf && (inf.routine || inf.headStart));
+    ui.focus = { date, itemId, mode: timed ? 'timer' : 'focus', running: false, remaining: timed ? it.min * 60000 : state.settings.focusMin * 60000, timeUp: false, endsAt: 0, lastTick: 0, rounds: 0, elapsed: 0, recorded: 0, stuckEndsAt: null, stuckPrompt: false, overrun: false, overrunShown: false, qDraft: '', hidden: false,
+      started: false, logged: false, starterDone: false, wall: null, wallFrom: null, shrinkDraft: null, shrunk: '', breakNo: 0 };
   }
+  ui.gap = null;
   ui.focus.hidden = false;
   closeSheet();
+  if (opts.wall && isWork(it)) { enterWall(ui.focus); return; }
   renderFocus();
+  if (opts.starter && isWork(it) && ui.focus.mode === 'focus' && !ui.focus.running) actions.focusStarter();
 }
-function endFocus(silent) { ui.focus = null; $('#focus-root').innerHTML = ''; document.body.style.overflow = ''; if (!silent) render(); }
+// add the focused minutes to the item, so your guess can be compared with the clock
+function recordFocusTime() {
+  const f = ui.focus; if (!f) return false;
+  const add = (f.elapsed - (f.recorded || 0)) / 60000;
+  f.recorded = f.elapsed;
+  if (add < 0.25) return false;
+  const it = findItem(f.date, f.itemId);
+  if (!isWork(it)) return false;
+  it.actual = Math.round(((it.actual || 0) + add) * 10) / 10;
+  return true;
+}
+function endFocus(silent) {
+  const changed = recordFocusTime();
+  ui.focus = null; $('#focus-root').innerHTML = ''; document.body.style.overflow = '';
+  if (!silent) { if (changed) commit(); else render(); }
+  renderGap();
+}
 function blockTotal(f) {
   if (f.mode === 'timer') { const it = findItem(f.date, f.itemId); return Math.max(60000, (it ? it.min : 1) * 60000); }
+  if (f.mode === 'starter') return state.settings.starterMin * 60000;
+  if (f.mode === 'reset') return RESET_MIN * 60000;
   return (f.mode === 'focus' ? state.settings.focusMin : state.settings.breakMin) * 60000;
 }
 const mmss = (ms) => { const s = Math.max(0, Math.ceil(ms / 1000)); return `${Math.floor(s / 60)}:${pad2(s % 60)}`; };
+const PILL_LABEL = { focus: 'Focus', break: 'Break', starter: 'Starting', reset: 'Reset' };
+function ringHtml(f) {
+  const total = blockTotal(f);
+  const C = 2 * Math.PI * 88;
+  const off = C * (1 - f.remaining / total);
+  return `<svg viewBox="0 0 200 200" aria-hidden="true"><circle class="ring-bg" cx="100" cy="100" r="88" fill="none" stroke-width="12"/><circle class="ring-fg" id="f-ring" cx="100" cy="100" r="88" fill="none" stroke-width="12" stroke-linecap="round" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"/></svg>`;
+}
 function renderFocus() {
   const f = ui.focus;
   const root = $('#focus-root');
-  if (!f) { root.innerHTML = ''; return; }
+  if (!f) { renderGap(); return; }
   const it = findItem(f.date, f.itemId);
   const info = itemInfo(it);
   if (!it || !info) { endFocus(); return; }
   const q = $('#f-question'); if (q) f.qDraft = q.value;
+  const sh = $('#f-shrink'); if (sh) f.shrinkDraft = sh.value;
   if (f.hidden) {
     document.body.style.overflow = ui.sheet ? 'hidden' : '';
-    root.innerHTML = `<div class="focus-pill"><button data-act="focusShow">${esc(f.mode === 'focus' ? 'Focus' : f.mode === 'break' ? 'Break' : info.title)} <span id="f-pill">${mmss(f.remaining)}</span></button><button class="x" data-act="focusEnd" aria-label="End focus session">${ICON.close}</button></div>`;
+    root.innerHTML = `<div class="focus-pill"><button data-act="focusShow">${esc(PILL_LABEL[f.mode] || info.title)} <span id="f-pill">${mmss(f.remaining)}</span></button><button class="x" data-act="focusEnd" aria-label="End focus session">${ICON.close}</button></div>`;
     return;
   }
   document.body.style.overflow = 'hidden';
+  const top = `<div class="focus-top"><span class="label">${esc(info.sub || info.label || 'Focus')}</span><button class="iconbtn" data-act="focusHide" aria-label="Minimize focus mode">${ICON.close}</button></div>
+      <h1 id="f-title">${esc(info.title)}</h1>`;
+  if (f.wall) {
+    root.innerHTML = `<div class="focus is-break" role="dialog" aria-modal="true" aria-labelledby="f-title"><div class="focus-inner">${top}${wallHtml(f, it, info)}</div></div>`;
+    if (f.wall === 'shrink') { const el = $('#f-shrink'); if (el) el.focus({ preventScroll: true }); }
+    return;
+  }
   const total = blockTotal(f);
-  const C = 2 * Math.PI * 88;
-  const off = C * (1 - f.remaining / total);
-  const modeText = f.mode === 'timer' ? (f.timeUp ? 'Time’s up' : 'Time left') : f.mode === 'focus' ? `Focus block ${f.rounds + 1}` : 'Break. Stand up, stretch, no phone.';
-  const canAsk = !info.routine;
-  root.innerHTML = `<div class="focus ${f.mode === 'break' ? 'is-break' : ''}" role="dialog" aria-modal="true" aria-labelledby="f-title">
-    <div class="focus-inner">
-      <div class="focus-top"><span class="label">${esc(info.sub || info.label || 'Focus')}</span><button class="iconbtn" data-act="focusHide" aria-label="Minimize focus mode">${ICON.close}</button></div>
-      <h1 id="f-title">${esc(info.title)}</h1>
-      <div class="focus-cards">
-        ${info.firstStep ? `<div class="focus-card"><b>First tiny step</b>${esc(info.firstStep)}</div>` : ''}
-        ${info.doneDef ? `<div class="focus-card"><b>Done looks like</b>${esc(info.doneDef)}</div>` : ''}
-      </div>
-      <div class="ring-wrap">
-        <svg viewBox="0 0 200 200" aria-hidden="true"><circle class="ring-bg" cx="100" cy="100" r="88" fill="none" stroke-width="12"/><circle class="ring-fg" id="f-ring" cx="100" cy="100" r="88" fill="none" stroke-width="12" stroke-linecap="round" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"/></svg>
-        <div class="ring-text"><div class="clock" id="f-clock" role="timer" aria-live="off">${mmss(f.remaining)}</div><div class="mode">${esc(modeText)}</div></div>
-      </div>
-      <div class="focus-ctl">
+  const day = getDay(f.date);
+  const reward = day && it.id === day.launchItemId && day.reward ? day.reward : '';
+  const firstStep = f.shrunk || info.firstStep;
+  const fresh = isWork(it) && f.mode === 'focus' && !f.started && !f.running && f.remaining >= total;
+  const modeText = f.mode === 'timer' ? (f.timeUp ? 'Time’s up' : 'Time left')
+    : f.mode === 'focus' ? `Focus block ${f.rounds + 1}`
+    : f.mode === 'starter' ? (f.starterDone ? 'That counts' : 'Just starting. You can stop when it rings.')
+    : `Break. ${breakIdea(f.breakNo)} No phone.`;
+  let ctl;
+  if (f.mode === 'starter' && f.starterDone) {
+    ctl = `<div class="callout okbox" role="status"><b>${state.settings.starterMin} minutes done. You started, and that counts.</b> Keep going if you want to; stopping is allowed too.
+      <div class="inline" style="margin-top:8px"><button class="btn primary" data-act="focusKeepGoing">Keep going: ${state.settings.focusMin}-minute block</button><button class="btn" data-act="focusStopHere">Stop here</button></div></div>`;
+  } else if (fresh) {
+    ctl = `<div class="focus-ctl"><button class="btn primary" data-act="focusStarter">Just start: ${state.settings.starterMin} minutes</button><button class="btn" data-act="focusStart">Start a ${state.settings.focusMin}-minute block</button></div>
+      <p class="small muted" style="text-align:center">Do the first tiny step badly on purpose. Phone in another room.</p>`;
+  } else {
+    ctl = `<div class="focus-ctl">
         ${f.running ? '<button class="btn" data-act="focusPause">Pause</button>' : (f.timeUp ? '' : `<button class="btn primary" data-act="focusStart">${f.remaining < total ? 'Resume' : (f.mode === 'break' ? 'Start break' : 'Start')}</button>`)}
         <button class="btn" data-act="focusReset">Reset</button>
-        ${f.mode === 'timer' ? '' : `<button class="btn ghost" data-act="focusSkip">${f.mode === 'focus' ? 'Skip to break' : 'Skip break'}</button>`}
+        ${f.mode === 'focus' || f.mode === 'break' ? `<button class="btn ghost" data-act="focusSkip">${f.mode === 'focus' ? 'Skip to break' : 'Skip break'}</button>` : ''}
+      </div>`;
+  }
+  root.innerHTML = `<div class="focus ${f.mode === 'break' ? 'is-break' : ''}" role="dialog" aria-modal="true" aria-labelledby="f-title">
+    <div class="focus-inner">
+      ${top}
+      <div class="focus-cards">
+        ${firstStep && !info.routine ? `<div class="focus-card"><b>First tiny step</b>${esc(firstStep)}</div>` : ''}
+        ${info.doneDef ? `<div class="focus-card"><b>Done looks like</b>${esc(info.doneDef)}</div>` : ''}
+        ${reward ? `<div class="focus-card"><b>Your reward after this</b>${esc(reward)}</div>` : ''}
       </div>
+      <div class="ring-wrap">
+        ${ringHtml(f)}
+        <div class="ring-text"><div class="clock" id="f-clock" role="timer" aria-live="off">${mmss(f.remaining)}</div><div class="mode">${esc(modeText)}</div></div>
+      </div>
+      ${ctl}
       ${f.mode === 'timer' ? '' : `<p class="small muted" style="text-align:center" id="f-elapsed">${elapsedText(f, it)}</p>`}
+      ${info.headStart && f.timeUp ? '<div class="callout okbox">Head start done. Stop here, even if you could keep going. It will be waiting for you, already started.</div>' : ''}
       ${f.overrun ? `<div class="callout amberbox"><b>You’ve reached your estimate of ${fmtDur(it.min)}.</b> Check your “done” line. If it’s met, it’s done. Polish only if there’s spare time later.
         <div class="inline" style="margin-top:8px"><button class="btn primary" data-act="focusDone">It’s done</button><button class="btn" data-act="focusExtend">Give it 15 more minutes</button></div></div>` : ''}
-      ${canAsk ? stuckHtml(f) : ''}
+      ${isWork(it) ? stuckHtml(f) : ''}
       <button class="btn wide" data-act="focusDone">${info.done ? 'Already done. Close' : 'Mark done'}</button>
     </div>
   </div>`;
@@ -2271,11 +3271,38 @@ function stuckHtml(f) {
     return `<div class="stuckbox"><span>Stuck timer: <strong id="f-stuck">${mmss(f.stuckEndsAt - Date.now())}</strong> left on this problem.</span>
       <div class="inline"><button class="btn" data-act="focusWriteQ">Write my question now</button><button class="btn ghost" data-act="focusUnstuck">I figured it out</button></div></div>`;
   }
-  return `<div class="inline" style="justify-content:center"><button class="btn ghost" data-act="focusStuck">I’m stuck on something</button></div>`;
+  return `<div class="inline" style="justify-content:center"><button class="btn ghost" data-act="focusStuck">Stuck on one problem</button><button class="btn ghost" data-act="focusWall">I’ve hit a wall</button></div>`;
+}
+// hitting a wall: name it, body first, then come back to one smaller piece
+function enterWall(f) {
+  if (f.running) { f.remaining = Math.max(0, f.endsAt - Date.now()); f.running = false; }
+  f.wallFrom = { mode: f.mode, remaining: f.remaining, starterDone: f.starterDone, timeUp: f.timeUp };
+  f.wall = 'name';
+  f.stuckEndsAt = null; f.stuckPrompt = false;
+  renderFocus();
+}
+function wallHtml(f, it, info) {
+  if (f.wall === 'name') {
+    return `<div class="wallbox"><h2>Name it in one word</h2>
+      <p class="muted">You’re flooded, not broken. Putting one word on the feeling moves you from drowning in it to watching it.</p>
+      <div class="wallwords">${WALL_WORDS.map((w) => `<button class="chip" data-act="wallWord" data-v="${esc(w)}">${esc(w)}</button>`).join('')}</div>
+      <button class="btn ghost" data-act="wallCancel">Back to the task</button></div>`;
+  }
+  if (f.wall === 'body') {
+    return `<div class="wallbox"><h2>Body first, then books</h2>
+      <div class="ring-wrap">${ringHtml(f)}<div class="ring-text"><div class="clock" id="f-clock" role="timer" aria-live="off">${mmss(f.remaining)}</div><div class="mode">${esc(f.wallWord || 'Reset')}</div></div></div>
+      <ul class="bodylist"><li>Leave the desk.</li><li>Drink a glass of water.</li><li>Breathe out slower than you breathe in.</li><li>Press your feet into the floor, then let go.</li></ul>
+      <button class="btn" data-act="wallReady">I’m ready now</button></div>`;
+  }
+  const val = f.shrinkDraft != null ? f.shrinkDraft : (f.shrunk || info.firstStep || '');
+  return `<div class="wallbox"><h2>Come back to one small piece</h2>
+    <p class="muted">Make it so small it’s almost silly: one problem, one sentence, one line. There’s always a size your brain will say yes to.</p>
+    <label class="field"><span>The smallest next piece</span><input class="input" id="f-shrink" value="${esc(val)}" placeholder="Write one rough sentence for question 1" maxlength="160"></label>
+    <div class="inline"><button class="btn primary" data-act="wallGo">Start ${state.settings.starterMin} minutes on that</button><button class="btn ghost" data-act="wallCancel">Back to the task</button></div></div>`;
 }
 function switchMode() {
   const f = ui.focus;
-  if (f.mode === 'focus') { f.rounds++; f.mode = 'break'; } else f.mode = 'focus';
+  if (f.mode === 'focus') { f.rounds++; f.mode = 'break'; f.breakNo = f.rounds; } else f.mode = 'focus';
   f.running = false;
   f.remaining = (f.mode === 'focus' ? state.settings.focusMin : state.settings.breakMin) * 60000;
   try { if (navigator.vibrate) navigator.vibrate(180); } catch (e) { /* not supported */ }
@@ -2287,7 +3314,7 @@ function tickFocus() {
   if (!f) return;
   const now = Date.now();
   if (f.running) {
-    if (f.mode === 'focus') f.elapsed += Math.max(0, Math.min(now, f.endsAt) - f.lastTick);
+    if (f.mode === 'focus' || f.mode === 'starter') f.elapsed += Math.max(0, Math.min(now, f.endsAt) - f.lastTick);
     f.lastTick = now;
     f.remaining = f.endsAt - now;
     if (f.remaining <= 0 && f.mode === 'timer') {
@@ -2297,17 +3324,79 @@ function tickFocus() {
       toast(`Time’s up${inf ? ' for ' + inf.title.toLowerCase() : ''}.`);
       renderFocus(); return;
     }
+    if (f.remaining <= 0 && f.mode === 'starter') {
+      f.remaining = 0; f.running = false; f.starterDone = true; f.hidden = false;
+      try { if (navigator.vibrate) navigator.vibrate(180); } catch (e) { /* not supported */ }
+      toast(`${state.settings.starterMin} minutes done. That counts as starting.`);
+      renderFocus(); return;
+    }
+    if (f.remaining <= 0 && f.mode === 'reset') {
+      f.remaining = 0; f.running = false; f.wall = 'shrink'; f.hidden = false;
+      try { if (navigator.vibrate) navigator.vibrate(180); } catch (e) { /* not supported */ }
+      toast('Five minutes are up. Come back to one small piece.');
+      renderFocus(); return;
+    }
     if (f.remaining <= 0) { f.remaining = 0; switchMode(); return; }
   }
   if (f.stuckEndsAt && now >= f.stuckEndsAt) { f.stuckEndsAt = null; f.stuckPrompt = true; if (f.hidden) { f.hidden = false; } renderFocus(); return; }
   const it = findItem(f.date, f.itemId);
-  if (it && f.mode !== 'timer' && !f.overrunShown && f.elapsed >= it.min * 60000) { f.overrunShown = true; f.overrun = true; renderFocus(); return; }
+  if (it && !f.wall && f.mode !== 'timer' && f.mode !== 'reset' && !f.overrunShown && f.elapsed >= it.min * 60000) { f.overrunShown = true; f.overrun = true; renderFocus(); return; }
   const clock = $('#f-clock'); if (clock) clock.textContent = mmss(f.remaining);
   const pill = $('#f-pill'); if (pill) pill.textContent = mmss(f.remaining);
   const ring = $('#f-ring');
   if (ring) { const total = blockTotal(f); const C = 2 * Math.PI * 88; ring.setAttribute('stroke-dashoffset', (C * (1 - f.remaining / total)).toFixed(1)); }
   const st = $('#f-stuck'); if (st && f.stuckEndsAt) st.textContent = mmss(f.stuckEndsAt - now);
   const el = $('#f-elapsed'); if (el && it) el.textContent = elapsedText(f, it);
+}
+
+// ---------- the break between tasks: a visible timer, so the gap has a shape and an end
+function renderGap() {
+  const root = $('#focus-root');
+  if (ui.focus) return;
+  const g = ui.gap;
+  if (!g) { root.innerHTML = ''; return; }
+  const it = findItem(g.date, g.nextId);
+  const inf = itemInfo(it);
+  if (!it || !inf || inf.done) { ui.gap = null; root.innerHTML = ''; return; }
+  const left = g.endsAt - Date.now();
+  root.innerHTML = left > 0
+    ? `<div class="focus-pill gap-pill" role="status"><button data-act="gapGo" aria-label="Break, then ${esc(inf.title)}. Start it now.">Break <span id="g-pill">${mmss(left)}</span><span class="gp-next">then ${esc(inf.title)}</span></button><button class="x" data-act="gapEnd" aria-label="Hide the break timer">${ICON.close}</button></div>`
+    : `<div class="focus-pill gap-pill is-over" role="status"><button data-act="gapGo" aria-label="Break’s over. Just start ${esc(inf.title)}.">Just start: <span class="gp-next">${esc(inf.title)}</span></button><button class="x" data-act="gapEnd" aria-label="Hide">${ICON.close}</button></div>`;
+}
+function tickGap() {
+  const g = ui.gap;
+  if (!g || ui.focus) return;
+  const left = g.endsAt - Date.now();
+  const el = $('#g-pill'); if (el && left > 0) el.textContent = mmss(left);
+  if (left <= 0 && !g.over) {
+    g.over = true;
+    try { if (navigator.vibrate) navigator.vibrate(180); } catch (e) { /* not supported */ }
+    const inf = itemInfo(findItem(g.date, g.nextId));
+    toast(`Break’s over. Time for ${inf ? inf.title : 'the next thing'}.`);
+    renderGap();
+  }
+}
+// after something is marked done: log it, start the break before the next task, and say what's next
+function afterDone(date, it, fromFocus) {
+  const info = itemInfo(it);
+  if (!info) return 'Done.';
+  logEvent(date, 'done', it.id);
+  const day = getDay(date);
+  const next = day.items.filter((i) => i !== it && i.start >= it.start && itemInfo(i) && !itemInfo(i).done).sort((a, b) => a.start - b.start)[0];
+  const nInfo = next && itemInfo(next);
+  const gapMin = state.settings.gapMin;
+  const gap = date === todayYmd() && !!next && isWork(it) && isWork(next) && gapMin > 0;
+  if (gap) ui.gap = { date, nextId: next.id, endsAt: Date.now() + gapMin * 60000, over: false };
+  let msg;
+  if (info.headStart) msg = 'Head start done. Stop there. It’s waiting for you, already started.';
+  else if (it.id === day.launchItemId && day.reward) msg = `Starter done. Your reward: ${day.reward}.${gap ? ` Then ${nInfo.title}.` : ''}`;
+  else if (gap) msg = `Done. ${gapMin}-minute break: ${breakIdea(day.items.indexOf(it)).toLowerCase()} Then ${nInfo.title}.`;
+  else msg = next ? `Done. Next: ${nInfo.title} at ${fmtTime(next.start)}.` : 'Done. That’s everything on the list.';
+  if (fromFocus && isWork(it) && it.actual >= 3) {
+    const est = it.est != null ? it.est : it.min;
+    msg = `Done in ${fmtDur(it.actual)} of focus (you guessed ${fmtDur(est)}). ${msg.replace(/^Done\. /, '')}`;
+  }
+  return msg;
 }
 function shiftAfter(date, it, delta) {
   const day = getDay(date);
@@ -2340,19 +3429,22 @@ const actions = {
   planBack() { ui.sheet.step = Math.max(1, ui.sheet.step - 1); renderSheet(true); },
   planBuild() {
     const s = ui.sheet;
+    const rw = $('#p-reward'); if (rw) s.reward = rw.value;
     const launch = buildPlan(s);
     ui.date = s.date;
     closeSheet();
     commit();
     const info = launch && itemInfo(launch);
-    toast(info ? `Timeline ready. Your starter: ${info.title} at ${fmtTime(launch.start)}.` : 'Timeline ready.');
+    const hs = getDay(s.date).items.find((i) => i.hs && !i.done);
+    toast(info ? `Timeline ready.${hs ? ` Head start at ${fmtTime(hs.start)}.` : ''} Your starter: ${info.title} at ${fmtTime(launch.start)}.` : 'Timeline ready.');
   },
+  planTomorrow() { if (ui.sheet) closeSheet(); ui.date = addDays(todayYmd(), 1); ui.tab = 'day'; render(); openPlan(); },
   openAdd() { openSheet({ kind: 'add', date: ui.date }); },
   addCand(el) {
     const s = ui.sheet;
     const c = planCandidates(s.date, {}).find((x) => x.key === el.dataset.key);
     if (!c) return;
-    const it = { id: uid('i'), type: c.type, ref: c.ref || null, stepId: c.stepId || null, min: c.min, start: 0, done: false, title: null, classId: null, taskId: null };
+    const it = { id: uid('i'), type: c.type, ref: c.ref || null, stepId: c.stepId || null, min: c.min, start: 0, done: false, title: null, classId: null, taskId: null, est: c.min, actual: 0, hs: false };
     if (c.type === 'task' || c.type === 'step') for (const [d2, dd] of Object.entries(state.days)) if (d2 !== s.date) dd.items = dd.items.filter((i) => keyOfItem(i) !== c.key || (itemInfo(i) && itemInfo(i).done));
     placeItem(s.date, it);
     setDoOn(c, s.date);
@@ -2360,7 +3452,15 @@ const actions = {
     renderSheet();
     toast(`Added at ${fmtTime(it.start)}.`);
   },
-  rearrange() { arrange(ui.date); commit(); toast('Rearranged. Finished items stayed put.'); },
+  rearrange() {
+    arrange(ui.date); commit();
+    // say the new plan in one sentence, so the switch is named instead of just felt
+    const open = getDay(ui.date).items.filter((i) => itemInfo(i) && !itemInfo(i).done).sort((a, b) => a.start - b.start);
+    toast(open.length ? `New plan: ${itemInfo(open[0]).title} at ${fmtTime(open[0].start)}${open[1] ? `, then ${itemInfo(open[1]).title}` : ''}.` : 'Rearranged. Finished items stayed put.');
+  },
+  oneThing(el) { state.settings.oneThing = el.dataset.v === '1'; commit(); window.scrollTo(0, 0); },
+  justStart(el) { openFocus(ui.date, el.dataset.id, { starter: true }); },
+  hitWall(el) { openFocus(ui.date, el.dataset.id, { wall: true }); },
   openItem(el) { openSheet({ kind: 'item', date: ui.date, id: el.dataset.id }); },
   toggleItem(el) {
     const date = ui.sheet && ui.sheet.date ? ui.sheet.date : ui.date;
@@ -2368,12 +3468,12 @@ const actions = {
     const info = itemInfo(it);
     setItemDone(it, !info.done);
     if (el.dataset.close) closeSheet();
+    let msg = '';
+    if (!info.done) msg = afterDone(date, it, false);
+    else { unlogDone(date, it.id); ui.gap = null; }
     commit();
-    if (!info.done) {
-      const day = getDay(date);
-      const next = day.items.filter((i) => i.start >= it.start && i !== it && itemInfo(i) && !itemInfo(i).done).sort((a, b) => a.start - b.start)[0];
-      toast(next ? `Done. Next: ${itemInfo(next).title} at ${fmtTime(next.start)}.` : 'Done. That’s everything on the list.');
-    }
+    if (msg) toast(msg);
+    renderGap();
   },
   itemSave(el) {
     const s = ui.sheet; const it = findItem(s.date, el.dataset.id); if (!it) return;
@@ -2419,10 +3519,19 @@ const actions = {
     closeSheet(); commit();
   },
   openReview() { openSheet({ kind: 'review', date: ui.date }); },
+  reviewPick(el) { syncReviewDraft(); const s = ui.sheet; const f = el.dataset.f; s[f] = s[f] === el.dataset.v ? '' : el.dataset.v; renderSheet(); },
   reviewSave() {
+    syncReviewDraft();
     const s = ui.sheet; const day = getDay(s.date, true);
-    day.review = { start: fromHHMM($('#r-start').value), helped: $('#r-helped').value.trim(), blocked: $('#r-blocked').value.trim(), kind: $('#r-kind').value.trim() };
-    closeSheet(); commit(); toast('Review saved. See your start times in the Playbook.');
+    const old = day.review || {};
+    const classOf = (title, prev) => { const it = day.items.find((i) => isWork(i) && itemInfo(i) && itemInfo(i).title === title); return it ? classOfItem(it) : prev || ''; };
+    day.review = {
+      start: fromHHMM(s.start), helped: (s.helped || '').trim(), blocked: (s.blocked || '').trim(), kind: (s.kindNote || '').trim(),
+      easiest: s.easiest || '', easiestClass: s.easiest ? classOf(s.easiest, old.easiest === s.easiest ? old.easiestClass : '') : '',
+      hardest: s.hardest || '', hardestClass: s.hardest ? classOf(s.hardest, old.hardest === s.hardest ? old.hardestClass : '') : '',
+    };
+    closeSheet(); commit();
+    toast(planTomorrowBtn(s.date) ? 'Review saved. Plan tomorrow now, while it’s fresh?' : 'Review saved. Your patterns are in the Playbook.');
   },
 
   // board
@@ -2455,7 +3564,8 @@ const actions = {
     if (t.done) toast(`Done: ${t.title}`);
   },
   taskPad() { syncTaskDraft(); const d = ui.sheet.draft; d.min = round5(d.min * 1.25); renderSheet(); toast(`Estimate is now ${fmtDur(d.min)}.`); },
-  taskDoOn(el) { syncTaskDraft(); const v = el.dataset.v; ui.sheet.draft.doOn = v === 'today' ? todayYmd() : v === 'tomorrow' ? addDays(todayYmd(), 1) : null; renderSheet(); },
+  taskDoOn(el) { syncTaskDraft(); const v = el.dataset.v; ui.sheet.draft.doOn = v === 'today' ? todayYmd() : v === 'tomorrow' ? addDays(todayYmd(), 1) : isYmd(v) ? v : null; renderSheet(); },
+  taskCalib(el) { syncTaskDraft(); const d = ui.sheet.draft; d.min = Math.max(0, num(el.dataset.v, d.min)); renderSheet(); toast(`Estimate is now ${fmtDur(d.min)}.`); },
   stepAdd() { syncTaskDraft(); const d = ui.sheet.draft; d.steps.push({ id: uid('s'), title: '', min: 15, done: false, doOn: null }); renderSheet(); const rows = $$('.s-title'); if (rows.length) rows[rows.length - 1].focus(); },
   stepDel(el) { syncTaskDraft(); const d = ui.sheet.draft; d.steps = d.steps.filter((x) => x.id !== el.dataset.id); renderSheet(); },
   stepMove(el) { syncTaskDraft(); const d = ui.sheet.draft; const i = d.steps.findIndex((x) => x.id === el.dataset.id); const j = i + Number(el.dataset.dir); if (i < 0 || j < 0 || j >= d.steps.length) return; [d.steps[i], d.steps[j]] = [d.steps[j], d.steps[i]]; renderSheet(); },
@@ -2469,7 +3579,78 @@ const actions = {
       commit();
     });
   },
-  askedQ(el) { const t = task(el.dataset.task); const q = t && t.questions.find((x) => x.id === el.dataset.id); if (q) { q.asked = true; commit(); } },
+  askedQ(el) { const t = task(el.dataset.task); const q = t && t.questions.find((x) => x.id === el.dataset.id); if (q) { q.asked = true; commit(); if (ui.sheet) renderSheet(); } },
+
+  // your week: sleep, school blocks, travel and events
+  openWeek() {
+    let back = null;
+    if (ui.sheet && ui.sheet.kind === 'settings') { syncSettingsDraft(); back = ui.sheet; }
+    openSheet({ kind: 'week', back });
+  },
+  weekBack() { const b = ui.sheet && ui.sheet.back; if (b) openSheet(b); else closeSheet(); },
+  newEvent(el) {
+    const date = el.dataset.date || null;
+    const back = ui.sheet ? (ui.sheet.kind === 'week' ? { kind: 'week', back: ui.sheet.back } : ui.sheet) : null;
+    openSheet({ kind: 'event', draft: newEventDraft(el.dataset.kind || 'event', date), isNew: true, back, repeat: date ? 'once' : 'weekly' });
+  },
+  editEvent(el) {
+    const e = state.events.find((x) => x.id === el.dataset.id); if (!e) return;
+    const back = ui.sheet ? (ui.sheet.kind === 'week' ? { kind: 'week', back: ui.sheet.back } : ui.sheet) : null;
+    openSheet({ kind: 'event', draft: JSON.parse(JSON.stringify(e)), isNew: false, back, repeat: e.date ? 'once' : 'weekly' });
+  },
+  eventRepeat(el) { syncEventDraft(); const s = ui.sheet; s.repeat = el.dataset.v; if (s.repeat === 'once' && !s.draft.date) s.draft.date = ui.date; renderSheet(); },
+  eventBack() { const b = ui.sheet && ui.sheet.back; if (b) openSheet(b); else closeSheet(); },
+  eventSave() {
+    syncEventDraft();
+    const s = ui.sheet; const d = s.draft;
+    d.name = d.name.trim() || ({ sleep: 'Sleep', school: 'School block', transit: 'Travel', event: 'Event' })[d.kind];
+    if (s.repeat === 'once') { if (!isYmd(d.date)) { toast('Pick the day it happens.'); return; } d.days = []; }
+    else { d.date = null; if (!d.days.length) { toast(d.kind === 'sleep' ? 'Pick at least one night.' : 'Pick at least one day.'); return; } }
+    if (d.kind !== 'sleep' && d.end <= d.start) { toast('It has to end after it starts.'); return; }
+    if (d.start === d.end) { toast('The start and end can’t be the same time.'); return; }
+    if (d.kind !== 'event') { d.before = 0; d.after = 0; }
+    if (d.kind !== 'transit') d.schoolOnly = false;
+    const i = state.events.findIndex((e) => e.id === d.id);
+    if (i >= 0) state.events[i] = d; else state.events.push(d);
+    commit();
+    actions.eventBack();
+    const planned = Object.keys(state.days).some((k) => k >= todayYmd() && state.days[k].items.some((x) => itemInfo(x) && !itemInfo(x).done));
+    toast(planned ? 'Saved. A day you already planned may need “Rearrange what’s left”.' : 'Saved. Homework will be planned around it.');
+  },
+  eventDelete() {
+    const s = ui.sheet; const id = s.draft.id; const name = s.draft.name || KIND[s.draft.kind].label;
+    const back = s.back && s.back.kind !== 'occ' ? s.back : null;
+    confirmSheet(`Delete ${name}?`, 'It comes off every day it was on. Homework you already planned stays where it is.', 'Delete', () => {
+      state.events = state.events.filter((e) => e.id !== id);
+      for (const d of Object.values(state.days)) d.goals = d.goals.filter((g) => g.eventId !== id);
+      commit();
+      if (back) openSheet(back);
+      toast(`${name} deleted.`);
+    });
+  },
+  openOcc(el) { openSheet({ kind: 'occ', evId: el.dataset.ev, date: el.dataset.od || ui.date }); },
+  goalAdd() {
+    const s = ui.sheet; if (!s || s.kind !== 'occ') return;
+    const inp = $('#g-new'); const text = inp ? inp.value.trim() : '';
+    if (!text) { if (inp) inp.focus(); return; }
+    getDay(s.date, true).goals.push({ id: uid('g'), eventId: s.evId, text, done: false });
+    commit(); renderSheet();
+    const n = $('#g-new'); if (n) n.focus();
+  },
+  goalDel(el) { const s = ui.sheet; const day = getDay(s.date); if (!day) return; day.goals = day.goals.filter((g) => g.id !== el.dataset.id); commit(); renderSheet(); },
+  occOff() {
+    const s = ui.sheet; const day = getDay(s.date, true);
+    const i = day.off.indexOf(s.evId);
+    if (i >= 0) day.off.splice(i, 1); else day.off.push(s.evId);
+    commit(); renderSheet();
+    toast(i >= 0 ? 'Back on for this day.' : 'Taken off this day, so that time is open now.');
+  },
+  noSchoolDay() {
+    const s = ui.sheet; const day = getDay(s.date, true);
+    day.noSchool = !day.noSchool;
+    commit(); renderSheet();
+    toast(day.noSchool ? 'No school this day: blocks and school travel are off, so that time is open.' : 'School is back on for this day.');
+  },
 
   // settings
   routineAdd() { syncSettingsDraft(); ui.sheet.draft.routines.push({ id: uid('r'), name: 'New routine', emoji: '⭐', min: 15, phase: 'end', order: ui.sheet.draft.routines.length, days: [1, 2, 3, 4, 5], fixed: null, doneDef: '' }); renderSheet(); },
@@ -2487,7 +3668,7 @@ const actions = {
   },
   resetAll() {
     confirmSheet('Erase everything?', `All classes, tasks, routines and days will be deleted${gh.connected ? ', on this device and every device that syncs with it' : ''}. This can’t be undone.`, 'Erase everything', () => {
-      const keepMeta = state.meta; state = emptyState(); state.meta = keepMeta; ui.focus = null; $('#focus-root').innerHTML = ''; commit();
+      const keepMeta = state.meta; state = emptyState(); state.meta = keepMeta; ui.focus = null; ui.gap = null; $('#focus-root').innerHTML = ''; commit();
     });
   },
   openSync() {
@@ -2536,14 +3717,56 @@ const actions = {
   startFocus(el) { openFocus(ui.sheet && ui.sheet.date ? ui.sheet.date : ui.date, el.dataset.id); },
   focusStart() {
     const f = ui.focus; if (!f || f.running) return;
-    f.running = true; f.endsAt = Date.now() + f.remaining; f.lastTick = Date.now();
-    if (f.mode === 'focus' && f.date === todayYmd()) {
-      const it = findItem(f.date, f.itemId); const info = itemInfo(it);
+    f.running = true; f.endsAt = Date.now() + f.remaining; f.lastTick = Date.now(); f.started = true;
+    const it = findItem(f.date, f.itemId); const info = itemInfo(it);
+    // any real start counts, even two minutes or the head start
+    if (info && !info.routine && (f.mode === 'focus' || f.mode === 'starter' || info.headStart) && f.date === todayYmd()) {
       const day = getDay(f.date, true);
-      if (info && !info.routine && day.firstStart == null) { day.firstStart = nowMin(); commit(); }
+      let changed = false;
+      if (day.firstStart == null) { day.firstStart = nowMin(); changed = true; }
+      if (!f.logged) { f.logged = true; logEvent(f.date, 'start', it.id); changed = true; }
+      if (changed) commit();
     }
     renderFocus();
   },
+  focusStarter() {
+    const f = ui.focus; if (!f) return;
+    if (f.running) { f.remaining = Math.max(0, f.endsAt - Date.now()); f.running = false; }
+    f.mode = 'starter'; f.starterDone = false; f.timeUp = false; f.remaining = state.settings.starterMin * 60000;
+    actions.focusStart();
+  },
+  focusKeepGoing() { const f = ui.focus; if (!f) return; f.mode = 'focus'; f.starterDone = false; f.remaining = state.settings.focusMin * 60000; actions.focusStart(); },
+  focusStopHere() { endFocus(); toast('You started, and that counts. It will be easier to come back to now.'); },
+  focusWall() { if (ui.focus) enterWall(ui.focus); },
+  wallWord(el) {
+    const f = ui.focus; if (!f) return;
+    f.wallWord = el.dataset.v;
+    logEvent(f.date, 'wall', f.itemId, el.dataset.v);
+    f.wall = 'body'; f.mode = 'reset'; f.remaining = RESET_MIN * 60000; f.running = true; f.endsAt = Date.now() + f.remaining; f.lastTick = Date.now();
+    commit(); renderFocus();
+  },
+  wallReady() { const f = ui.focus; if (!f) return; f.running = false; f.wall = 'shrink'; renderFocus(); },
+  wallGo() {
+    const f = ui.focus; if (!f) return;
+    const text = ($('#f-shrink') ? $('#f-shrink').value : '').trim();
+    if (!text) { toast('Write the smallest next piece first. A few words is enough.'); return; }
+    f.shrunk = text; f.shrinkDraft = null; f.wall = null; f.wallFrom = null;
+    const it = findItem(f.date, f.itemId);
+    const t = it && it.type === 'task' ? task(it.ref) : null;
+    if (t && t.firstStep !== text) { t.firstStep = text; commit(); }
+    actions.focusStarter();
+  },
+  wallCancel() {
+    const f = ui.focus; if (!f) return;
+    const from = f.wallFrom;
+    f.wall = null; f.running = false; f.shrinkDraft = null;
+    if (from) Object.assign(f, from);
+    else { f.mode = 'focus'; f.remaining = state.settings.focusMin * 60000; f.starterDone = false; f.timeUp = false; }
+    f.wallFrom = null;
+    renderFocus();
+  },
+  gapGo() { const g = ui.gap; ui.gap = null; if (g) openFocus(g.date, g.nextId, { starter: true }); else renderGap(); },
+  gapEnd() { ui.gap = null; renderGap(); },
   focusPause() { const f = ui.focus; if (!f) return; f.running = false; f.remaining = Math.max(0, f.endsAt - Date.now()); renderFocus(); },
   focusReset() { const f = ui.focus; if (!f) return; f.running = false; f.timeUp = false; f.remaining = blockTotal(f); renderFocus(); },
   focusSkip() { if (ui.focus && ui.focus.mode !== 'timer') switchMode(); },
@@ -2572,19 +3795,25 @@ const actions = {
   },
   focusDone() {
     const f = ui.focus; const it = findItem(f.date, f.itemId);
-    if (it && itemInfo(it) && !itemInfo(it).done) setItemDone(it, true);
+    const wasDone = !it || !itemInfo(it) || itemInfo(it).done;
+    if (!wasDone) setItemDone(it, true);
     const date = f.date;
     endFocus(true);
+    const msg = wasDone ? '' : afterDone(date, it, true);
     commit();
-    const day = getDay(date);
-    const next = it && day.items.filter((i) => i !== it && i.start >= it.start && itemInfo(i) && !itemInfo(i).done).sort((a, b) => a.start - b.start)[0];
-    toast(next ? `Done. Next: ${itemInfo(next).title} at ${fmtTime(next.start)}.` : 'Done.');
+    if (msg) toast(msg);
+    renderGap();
   },
 };
 const changes = {
+  planHeadStart(el) { ui.sheet.headStart = el.checked; },
+  goalDone(el) {
+    const day = getDay(el.dataset.date); const g = day && day.goals.find((x) => x.id === el.dataset.id); if (!g) return;
+    g.done = el.checked; commit(); if (ui.sheet) renderSheet();
+  },
   showDone(el) { ui.showDone = el.checked; render(); },
   planPick(el) { ui.sheet.sel[el.dataset.key] = el.checked; renderSheet(); },
-  planLaunch(el) { ui.sheet.launch = el.dataset.key; },
+  planLaunch(el) { ui.sheet.launch = el.dataset.key; const rw = $('#p-reward'); if (rw) ui.sheet.reward = rw.value; renderSheet(); },
   taskToggle() { syncTaskDraft(); renderSheet(); },
 };
 
@@ -2599,21 +3828,25 @@ document.addEventListener('change', (e) => {
   if (el && changes[el.dataset.change]) changes[el.dataset.change](el, e);
 });
 document.addEventListener('input', (e) => {
-  if (ui.sheet && ui.sheet.kind === 'task' && e.target.closest('.steprow, #t-due')) {
+  if (ui.sheet && ui.sheet.kind === 'task' && e.target.closest('.steprow, #t-due, #t-doon, #t-min, #t-class')) {
     syncTaskDraft();
     const box = $('#t-backward');
     if (box) box.outerHTML = backwardBox(ui.sheet.draft);
+    const dh = $('#t-duehelp'); if (dh) dh.outerHTML = dueHelpHtml(ui.sheet.draft);
+    const cb = $('#t-calib'); if (cb) cb.outerHTML = calibHtml(ui.sheet.draft);
   }
+  if (ui.sheet && ui.sheet.kind === 'plan' && e.target.id === 'p-reward') ui.sheet.reward = e.target.value;
 });
 document.addEventListener('keydown', (e) => {
   if (e.key !== 'Escape') return;
   if (ui.sheet) { closeSheet(); return; }
   if (ui.focus && !ui.focus.hidden) actions.focusHide();
 });
-document.addEventListener('visibilitychange', () => { if (!document.hidden) { if (ui.focus) tickFocus(); if (!ui.sheet) render(); } });
+document.addEventListener('visibilitychange', () => { if (!document.hidden) { if (ui.focus) tickFocus(); tickGap(); if (!ui.sheet) render(); } });
 
 // ---------- boot
-setInterval(tickFocus, 500);
+setInterval(() => { tickFocus(); tickGap(); }, 500);
+document.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.target && e.target.id === 'g-new') { e.preventDefault(); actions.goalAdd(); } });
 setInterval(() => { if (ui.tab === 'day' && !ui.sheet && ui.date === todayYmd()) render(); }, 60000);
 render();
 initDb();
